@@ -1,0 +1,212 @@
+---
+title: "Curiosity Project: Student Pilot Data Analysis"
+format: 
+  html:
+        toc: true
+        number-sections: true
+  pdf:
+        toc: true
+        number-sections: true
+        keep-tex: true
+        include-in-header:
+                text: |
+                  \usepackage{fvextra}
+                  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+        include-before-body: 
+                text: |
+                  \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+                  showspaces = false,
+                  showtabs = false,
+                  breaksymbolleft={},
+                  breaklines
+                  }
+execute: 
+  echo: false
+  output: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+
+source(here::here("scripts", "01_setup.R"))
+
+```
+
+The raw data from the student pilot test contained 105 responses. 22 of the responses were removed because they were missing names and student ID numbers. An additional 3 responses were removed because they were either `Mike` or nonsensical responses to the question asking for student names (`Q30_1`) or student IDs (`Q30_2`). The final sample size is 80 respondents.
+
+# Experimental Conditions
+
+```{r}
+#| label: exp-cond
+
+source(here::here("scripts", "02_exp-cond.R"))
+
+```
+
+The random assignment to conditions appears to have worked fine. The number of respondents per condition ranged from 18 to 21 (@tbl-expcond).
+
+```{r}
+#| label: tbl-expcond
+#| output: TRUE
+#| tbl-cap: "Number of respondents in the control and experimental conditions."
+
+pilot |> freq(stim) |> 
+        na.omit() |> 
+        kbl(digits = 1)
+
+```
+
+The manipulation check for the question showed that respondents who were exposed to a stimulus that contained a question were significantly more likely to answer "Yes" to `Q24` ("Did the meme you just viewed contain a question?"; @tbl-mcheck). Note that the control condition did not contain a question.
+
+```{r}
+#| label: tbl-mcheck
+#| output: TRUE
+#| tbl-cap: "Manipulation check for presence of a question."
+
+tbl |> 
+        kbl()
+
+```
+
+# Situational Curiosity
+
+```{r}
+#| label: DVs
+
+source(here::here("scripts", "03_DVs.R"))
+
+```
+
+Cleaned the items `Q25_1` through `Q25_4` and determined the Cronbach's alpha ($\alpha = .95$). Did not run a factor analysis since the correlation matrix showed high significant ($p < .001$) inter-item correlations ranging from $0.74$ to $0.89$. Combined items in a mean index ($M = 3.65$, $SD = 1.65$).
+
+There were no significant differences in the mean of situational curiosity across conditions (@fig-means).
+
+```{r}
+#| label: fig-means
+#| output: TRUE
+#| fig-cap: "Mean of situational curiosity by experimental condition."
+
+pilot |> 
+        select(curious, stim) |> 
+        na.omit() |> 
+        ggplot(aes(x = stim, y = curious)) +
+        scale_y_continuous(name = "Situational curiosity",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+Examined the cleaned versions of the individual items (`Q25_1c` thru `Q25_4c`).
+
+```{r}
+#| label: fig-means1
+#| output: TRUE
+#| fig-cap: "Mean of Q25_1c by experimental condition."
+
+pilot |> 
+        select(Q25_1c, stim) |> 
+        na.omit() |> 
+        ggplot(aes(x = stim, y = Q25_1c)) +
+        scale_y_continuous(name = "... made you curious.",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+#| label: fig-means2
+#| output: TRUE
+#| fig-cap: "Mean of Q25_2c by experimental condition."
+
+pilot |> 
+        select(Q25_2c, stim) |> 
+        na.omit() |> 
+        ggplot(aes(x = stim, y = Q25_2c)) +
+        scale_y_continuous(name = "... captured your interest.",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+#| label: fig-means3
+#| output: TRUE
+#| fig-cap: "Mean of Q25_3c by experimental condition."
+
+pilot |> 
+        select(Q25_3c, stim) |> 
+        na.omit() |> 
+        ggplot(aes(x = stim, y = Q25_3c)) +
+        scale_y_continuous(name = "... captured your attention.",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+#| label: fig-means4
+#| output: TRUE
+#| fig-cap: "Mean of Q25_4c by experimental condition."
+
+pilot |> 
+        select(Q25_4c, stim) |> 
+        na.omit() |> 
+        ggplot(aes(x = stim, y = Q25_4c)) +
+        scale_y_continuous(name = "... made you want to know more.",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
