@@ -44,7 +44,7 @@ pilot <- pilot |>
                                  stim == "No question, no curiosity prime" ~ "No question",
                                  stim == "Question, no curiosity prime" ~ "Question",
                                  stim == "Question, curiosity prime" ~ "Question"))
-pilot |> freq(stimQ) # no question = 39, question = 41
+pilot |> freq(stimQ) # no question = 84, question = 81
 
 
 ## Curiosity prime vs. no curiosity prime
@@ -53,4 +53,4 @@ pilot <- pilot |>
                                  stim == "No question, no curiosity prime" ~ "No curiosity prime",
                                  stim == "Question, no curiosity prime" ~ "No curiosity prime",
                                  stim == "Question, curiosity prime" ~ "Curiosity prime"))
-pilot |> freq(stimC) # 20 in prime condition, 60 in no prime condition
+pilot |> freq(stimC) # 39 in prime condition, 126 in no prime condition

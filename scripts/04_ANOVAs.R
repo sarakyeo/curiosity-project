@@ -10,8 +10,7 @@ pilot |>
         select(stim, curious) |> 
         na.omit() |> 
         group_by() |> 
-        pairwise_t_test(curious ~ stim, p.adjust.method = "bonferroni") |> 
-        kbl()
+        pairwise_t_test(curious ~ stim, p.adjust.method = "bonferroni")
         
 pilot |> 
         select(stimQ, curious) |>
