@@ -42,7 +42,7 @@ var_remove <- function(vars, data){
 
 # Load data ---------------------------------------------------------------
 
-pilot <- read_csv(here::here("data", "curiosity-data_student-pilot.csv"))
+pilot <- read_csv(here::here("data", "curiosity-2-data.csv"))
 glimpse(pilot)
 
 
@@ -59,3 +59,6 @@ pilot <- pilot |>
                        Q30_2 != "Mike") # removed 3 obs
 
 pilot |> freq(StartDate)
+
+
+
