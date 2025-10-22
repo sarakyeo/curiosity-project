@@ -1,26 +1,42 @@
 
-# Check for differences in `curious` between conditions -------------------
+# Astronomy: Situational curiosity -------------------
+pilot |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+        na.omit() |> 
+        lm(formula = asitcur ~ acurious + areso) |> 
+        summ()
 
+# Astronomy: Information Seeking ------------
 pilot |> 
-        select(stim, curious) |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
         na.omit() |> 
-        anova_test(curious ~ stim) # ns
+        lm(formula = ainfoseek ~ acurious + areso) |> 
+        summ()
 
+# Astronomy: Provided closure ----------------
 pilot |> 
-        select(stim, curious) |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
         na.omit() |> 
-        group_by() |> 
-        pairwise_t_test(curious ~ stim, p.adjust.method = "bonferroni") |> 
-        kbl()
-        
-pilot |> 
-        select(stimQ, curious) |>
-        na.omit() |> 
-        group_by() |> 
-        t_test(curious ~ stimQ) # ns
+        lm(formula = aclosure ~ acurious + areso) |> 
+        summ()
 
+# Rain: Situational curiosity -------------------
 pilot |> 
-        select(stimC, curious) |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
         na.omit() |> 
-        group_by() |> 
-        t_test(curious ~ stimC) # ns
+        lm(formula = rsitcur ~ rcurious + rreso) |> 
+        summ()
+
+# Rain: Information Seeking ------------
+pilot |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
+        na.omit() |> 
+        lm(formula = rinfoseek ~ rcurious + rreso) |> 
+        summ()
+
+# Rain: Provided closure ----------------
+pilot |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
+        na.omit() |> 
+        lm(formula = rclosure ~ rcurious + rreso) |> 
+        summ()

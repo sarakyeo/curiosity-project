@@ -49,15 +49,15 @@ pilot |>
 
 pilot <- pilot |> 
         rowwise() |> 
-        mutate(acurious = mean(
+        mutate(asitcur = mean(
                 c(Q25_1c, Q25_2c, Q25_3c, Q25_4c),
                 na.rm = TRUE)
         )
 
-pilot |> freq(acurious)
+pilot |> freq(asitcur)
 pilot |> 
         group_by() |>
-        descr(acurious) # M = 4.20, SD = 1.48
+        descr(asitcur) # M = 4.20, SD = 1.48
 
 
 ## Rain ----------------
@@ -91,15 +91,15 @@ pilot |>
 
 pilot <- pilot |> 
         rowwise() |> 
-        mutate(rcurious = mean(
+        mutate(rsitcur = mean(
                 c(Q46_1c, Q46_2c, Q46_3c, Q46_4c),
                 na.rm = TRUE)
         )
 
-pilot |> freq(rcurious)
+pilot |> freq(rsitcur)
 pilot |> 
         group_by() |>
-        descr(rcurious) # M = 4.57, SD = 1.45
+        descr(rsitcur) # M = 4.57, SD = 1.45
 
 
 # Information Seeking -------------------------
