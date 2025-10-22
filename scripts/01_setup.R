@@ -86,3 +86,13 @@ pilot <- pilot |>
                 ))
 pilot |> freq(white) # 87.5 % White
 
+
+# Check student names ---------------------------------
+# Need to get rid of test responses that I know are either Aidan's or Casey's responses
+pilot |> freq(Q52_1)
+pilot <- pilot |>
+        filter(Q52_1 != "aidan craig sundine" | is.na(Q52_1)) |>
+        filter(Q52_1 != "Aidan Craig Sundine" | is.na(Q52_1)) # 260 R remaining
+
+
+
