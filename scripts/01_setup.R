@@ -42,23 +42,47 @@ var_remove <- function(vars, data){
 
 # Load data ---------------------------------------------------------------
 
-pilot <- read_csv(here::here("data", "curiosity-2-data.csv"))
+pilot <- read_csv(here::here("data", "curiosity-data-F25.csv"))
 glimpse(pilot)
 
 
-# Filtering out survey questionnaire tests --------------------------------
+# Filtering out those who did not consent to participate --------------------------------
 
-pilot |> freq(Q30_1)
+pilot |> freq(Q2) # 2 R (respondents) did not consent
 pilot <- pilot |> 
-        filter(is.na(Q30_1) == FALSE) # remove NAs for names from sample
+        filter(Q2 == "Yes") # keep those who responded "Yes" to Q2 in data frame; 265 R remaining
 
-pilot |> freq(Q30_2)
+# Filtering out those who do not live in the US -----------
+
+pilot |> freq(Q3) # 263 R reside in
 pilot <- pilot |> 
-        filter(Q30_2 != "ff" &
-                       Q30_2 != "kkkklknljlnl" &
-                       Q30_2 != "Mike") # removed 3 obs
-
-pilot |> freq(StartDate)
+        filter(Q3 == "Yes") # removed 2 obs; 263 R remaining
 
 
+# Check R age ----------------
+pilot |> freq(Q5)
+pilot <- pilot |> 
+        rowwise() |> 
+        mutate(age = 2025 - Q5)
+pilot |> freq(age)
+pilot |>
+        group_by() |> 
+        descr(age) # M = 21.0, SD = 3.62; min = 18
+
+
+# Demographics --------------------
+## Race ----------
+pilot |> freq(Q8_5) # 230 R identify as White
+pilot <- pilot |>
+        mutate(
+                white = case_when(
+                        Q8_5 == "White" ~ "White",
+                        is.na(Q8_5) == TRUE ~ "non-White"
+                )) |> 
+        mutate(
+                white = factor(
+                        white,
+                        levels = c("non-White", "White")
+                ))
+pilot |> freq(white) # 87.5 % White
 
