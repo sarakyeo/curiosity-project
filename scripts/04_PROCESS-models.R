@@ -1,7 +1,7 @@
 source(here::here("scripts", "process.R"))
 
 # Need to make variables all numeric ----------------
-
+## Astronomy -------------------
 pilot |> 
   select(acurious, areso) |> 
   freq()
@@ -22,13 +22,34 @@ pilot |>
   select(acurious, acuriousn, areso, areson) |> 
   freq()
 
+## Rain ----------------------
+pilot |> 
+  select(rcurious, rreso) |> 
+  freq()
+
+pilot <- pilot |> 
+  mutate(rcuriousn = case_when(
+    rcurious == "Curious" ~ 2,
+    rcurious == "No curious" ~ 1
+  ))
+
+pilot <- pilot |> 
+  mutate(rreson = case_when(
+    rreso == "Resolution" ~ 2,
+    rreso == "No resolution" ~ 1
+  ))
+
+pilot |> 
+  select(rcurious, rcuriousn, rreso, rreson) |> 
+  freq()
+
 
 # Just trying out this PROCESS model, not sure the theoretical underpinning is sound ----------------
 process(
   data = pilot,
-  y = "asitcur",
-  x = "acuriousn",
-  m = "aclosure",
-  cov = "areson",
+  y = "rsitcur",
+  x = "rcuriousn",
+  m = "rclosure",
+  cov = "rreson",
   model = 4
 )
