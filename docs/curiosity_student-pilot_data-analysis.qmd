@@ -1,5 +1,5 @@
 ---
-title: "Curiosity Project: Student Pilot Data Analysis"
+title: "Curiosity Project: Student Pilot Data Analysis (22-Oct-25)"
 format: 
   html:
         toc: true
@@ -35,7 +35,7 @@ source(here::here("scripts", "01_setup.R"))
 
 ```
 
-The raw data from the student pilot test contained 105 responses. 22 of the responses were removed because they were missing names and student ID numbers. An additional 3 responses were removed because they were either `Mike` or nonsensical responses to the question asking for student names (`Q30_1`) or student IDs (`Q30_2`). The final sample size is 80 respondents.
+The raw data from the student pilot test contained 267 responses. After removing those who did not consent to participate, Aidan's test responses, and respondents who do not reside in the U.S., the final sample size is 263 respondents.
 
 # Experimental Conditions
 
@@ -46,28 +46,27 @@ source(here::here("scripts", "02_exp-cond.R"))
 
 ```
 
-The random assignment to conditions appears to have worked fine. The number of respondents per condition ranged from 18 to 21 (@tbl-expcond).
+The random assignment to conditions appears to have worked fine. The number of respondents per condition ranged from 56-63 (@tbl-aexpcond and @tbl-rexpcond).
 
 ```{r}
-#| label: tbl-expcond
+#| label: tbl-aexpcond
 #| output: TRUE
-#| tbl-cap: "Number of respondents in the control and experimental conditions."
+#| tbl-cap: "Number of respondents in the control and experimental conditions for the astronomy issue."
 
-pilot |> freq(stim) |> 
+pilot |> freq(astim) |> 
         na.omit() |> 
         kbl(digits = 1)
 
 ```
 
-The manipulation check for the question showed that respondents who were exposed to a stimulus that contained a question were significantly more likely to answer "Yes" to `Q24` ("Did the meme you just viewed contain a question?"; @tbl-mcheck). Note that the control condition did not contain a question.
-
 ```{r}
-#| label: tbl-mcheck
+#| label: tbl-rexpcond
 #| output: TRUE
-#| tbl-cap: "Manipulation check for presence of a question."
+#| tbl-cap: "Number of respondents in the control and experimental conditions for the rain/geosmin issue."
 
-tbl |> 
-        kbl()
+pilot |> freq(rstim) |> 
+        na.omit() |> 
+        kbl(digits = 1)
 
 ```
 
@@ -80,19 +79,17 @@ source(here::here("scripts", "03_DVs.R"))
 
 ```
 
-Cleaned the items `Q25_1` through `Q25_4` and determined the Cronbach's alpha ($\alpha = .95$). Did not run a factor analysis since the correlation matrix showed high significant ($p < .001$) inter-item correlations ranging from $0.74$ to $0.89$. Combined items in a mean index ($M = 3.65$, $SD = 1.65$).
-
-There were no significant differences in the mean of situational curiosity across conditions (@fig-means).
+Cleaned the items `Q25_1` through `Q25_4` (astronomy) and `Q46_1` through `Q46_4` (rain/geosmin) and determined the Cronbach's alpha (astronomy: Cronbach's $\alpha = .92$; rain/geosmin: Cronbach's $\alpha = .93$). Combined items in two mean indices.
 
 ```{r}
-#| label: fig-means
+#| label: fig-asitcur
 #| output: TRUE
-#| fig-cap: "Mean of situational curiosity by experimental condition."
+#| fig-cap: "Mean of situational curiosity by experimental condition for the astronomy issue."
 
 pilot |> 
-        select(curious, stim) |> 
+        select(asitcur, astim) |> 
         na.omit() |> 
-        ggplot(aes(x = stim, y = curious)) +
+        ggplot(aes(x = astim, y = asitcur)) +
         scale_y_continuous(name = "Situational curiosity",
                            limits = c(1,7),
                            breaks = seq(1, 7, 1), 
@@ -109,18 +106,43 @@ pilot |>
 
 ```
 
-Examined the cleaned versions of the individual items (`Q25_1c` thru `Q25_4c`).
-
 ```{r}
-#| label: fig-means1
+#| label: fig-rsitcur
 #| output: TRUE
-#| fig-cap: "Mean of Q25_1c by experimental condition."
+#| fig-cap: "Mean of situational curiosity by experimental condition for the rain/geosmin issue."
 
 pilot |> 
-        select(Q25_1c, stim) |> 
+        select(rsitcur, rstim) |> 
         na.omit() |> 
-        ggplot(aes(x = stim, y = Q25_1c)) +
-        scale_y_continuous(name = "... made you curious.",
+        ggplot(aes(x = rstim, y = rsitcur)) +
+        scale_y_continuous(name = "Situational curiosity",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+# Information Seeking
+
+```{r}
+#| label: fig-ainfoseek
+#| output: TRUE
+#| fig-cap: "Mean of information seeking by experimental condition for the astronomy issue."
+
+pilot |> 
+        select(ainfoseek, astim) |> 
+        na.omit() |> 
+        ggplot(aes(x = astim, y = ainfoseek)) +
+        scale_y_continuous(name = "Likelihood of seeking information",
                            limits = c(1,7),
                            breaks = seq(1, 7, 1), 
                            expand = c(0,0)) + 
@@ -137,15 +159,42 @@ pilot |>
 ```
 
 ```{r}
-#| label: fig-means2
+#| label: fig-rinfoseek
 #| output: TRUE
-#| fig-cap: "Mean of Q25_2c by experimental condition."
+#| fig-cap: "Mean of information seeking by experimental condition for the rain/geosmin issue."
 
 pilot |> 
-        select(Q25_2c, stim) |> 
+        select(rinfoseek, rstim) |> 
         na.omit() |> 
-        ggplot(aes(x = stim, y = Q25_2c)) +
-        scale_y_continuous(name = "... captured your interest.",
+        ggplot(aes(x = rstim, y = rinfoseek)) +
+        scale_y_continuous(name = "Likelihood of seeking information",
+                           limits = c(1,7),
+                           breaks = seq(1, 7, 1), 
+                           expand = c(0,0)) + 
+        scale_x_discrete(name = "") +
+        theme_apa() +
+        stat_summary(fun = mean, geom = "point") +
+        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
+        theme(title = element_text(size = 12, face = "bold"),
+              axis.title.x = element_text(size = 12, face = "plain"),
+              axis.title.y = element_text(size = 12, face = "plain"),
+              axis.text = element_text(size = 12, face = "plain"),
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+# Provided Closure
+
+```{r}
+#| label: fig-aclosure
+#| output: TRUE
+#| fig-cap: "Mean of index tapping the extent to which the information provided closure by experimental condition for the astronomy issue."
+
+pilot |> 
+        select(aclosure, astim) |> 
+        na.omit() |> 
+        ggplot(aes(x = astim, y = aclosure)) +
+        scale_y_continuous(name = "Extent to which the information provided closure",
                            limits = c(1,7),
                            breaks = seq(1, 7, 1), 
                            expand = c(0,0)) + 
@@ -162,40 +211,15 @@ pilot |>
 ```
 
 ```{r}
-#| label: fig-means3
+#| label: fig-rclosure
 #| output: TRUE
-#| fig-cap: "Mean of Q25_3c by experimental condition."
+#| fig-cap: "Mean of index tapping the extent to which the information provided closure by experimental condition for the rain/geosmin issue."
 
 pilot |> 
-        select(Q25_3c, stim) |> 
+        select(rclosure, rstim) |> 
         na.omit() |> 
-        ggplot(aes(x = stim, y = Q25_3c)) +
-        scale_y_continuous(name = "... captured your attention.",
-                           limits = c(1,7),
-                           breaks = seq(1, 7, 1), 
-                           expand = c(0,0)) + 
-        scale_x_discrete(name = "") +
-        theme_apa() +
-        stat_summary(fun = mean, geom = "point") +
-        stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2) +
-        theme(title = element_text(size = 12, face = "bold"),
-              axis.title.x = element_text(size = 12, face = "plain"),
-              axis.title.y = element_text(size = 12, face = "plain"),
-              axis.text = element_text(size = 12, face = "plain"),
-              axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
-
-```{r}
-#| label: fig-means4
-#| output: TRUE
-#| fig-cap: "Mean of Q25_4c by experimental condition."
-
-pilot |> 
-        select(Q25_4c, stim) |> 
-        na.omit() |> 
-        ggplot(aes(x = stim, y = Q25_4c)) +
-        scale_y_continuous(name = "... made you want to know more.",
+        ggplot(aes(x = rstim, y = rclosure)) +
+        scale_y_continuous(name = "Extent to which the information provided closure",
                            limits = c(1,7),
                            breaks = seq(1, 7, 1), 
                            expand = c(0,0)) + 

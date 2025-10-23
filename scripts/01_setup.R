@@ -43,7 +43,7 @@ var_remove <- function(vars, data){
 # Load data ---------------------------------------------------------------
 
 pilot <- read_csv(here::here("data", "curiosity-data-F25.csv"))
-glimpse(pilot)
+glimpse(pilot) # 267 rows, 126 columns
 
 
 # Filtering out those who did not consent to participate --------------------------------

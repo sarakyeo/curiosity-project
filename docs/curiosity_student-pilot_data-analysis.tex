@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,21 +8,22 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -39,9 +41,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -67,8 +66,7 @@
 \makeatother
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -93,6 +91,20 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -152,13 +164,11 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
-  pdftitle={Curiosity Project: Student Pilot Data Analysis},
+  pdftitle={Curiosity Project: Student Pilot Data Analysis (22-Oct-25)},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -167,10 +177,9 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Curiosity Project: Student Pilot Data Analysis}
+\title{Curiosity Project: Student Pilot Data Analysis (22-Oct-25)}
 \author{}
 \date{}
-
 \begin{document}
 \maketitle
 
@@ -188,23 +197,21 @@ breaklines
 \tableofcontents
 }
 
-The raw data from the student pilot test contained 105 responses. 22 of
-the responses were removed because they were missing names and student
-ID numbers. An additional 3 responses were removed because they were
-either \texttt{Mike} or nonsensical responses to the question asking for
-student names (\texttt{Q30\_1}) or student IDs (\texttt{Q30\_2}). The
-final sample size is 80 respondents.
+The raw data from the student pilot test contained 267 responses. After
+removing those who did not consent to participate, Aidan's test
+responses, and respondents who do not reside in the U.S., the final
+sample size is 263 respondents.
 
 \section{Experimental Conditions}\label{experimental-conditions}
 
 The random assignment to conditions appears to have worked fine. The
-number of respondents per condition ranged from 18 to 21
-(Table~\ref{tbl-expcond}).
+number of respondents per condition ranged from 56-63
+(Table~\ref{tbl-aexpcond} and Table~\ref{tbl-rexpcond}).
 
 \begin{table}
 
-\caption{\label{tbl-expcond}Number of respondents in the control and
-experimental conditions.}
+\caption{\label{tbl-aexpcond}Number of respondents in the control and
+experimental conditions for the astronomy issue.}
 
 \centering{
 
@@ -212,15 +219,15 @@ experimental conditions.}
 \hline
   & Freq & \% Valid & \% Valid Cum. & \% Total & \% Total Cum.\\
 \hline
-Control & 18 & 22.5 & 22.5 & 22.5 & 22.5\\
+No curious, resolution & 63 & 26.2 & 26.2 & 24.2 & 24.2\\
 \hline
-No question, no curiosity prime & 21 & 26.2 & 48.8 & 26.2 & 48.8\\
+No curious, no resolution & 60 & 25.0 & 51.2 & 23.1 & 47.3\\
 \hline
-Question, no curiosity prime & 21 & 26.2 & 75.0 & 26.2 & 75.0\\
+Curious, resolution & 61 & 25.4 & 76.7 & 23.5 & 70.8\\
 \hline
-Question, curiosity prime & 20 & 25.0 & 100.0 & 25.0 & 100.0\\
+Curious, no resolution & 56 & 23.3 & 100.0 & 21.5 & 92.3\\
 \hline
-Total & 80 & 100.0 & 100.0 & 100.0 & 100.0\\
+Total & 260 & 100.0 & 100.0 & 100.0 & 100.0\\
 \hline
 \end{tabular}
 
@@ -228,26 +235,26 @@ Total & 80 & 100.0 & 100.0 & 100.0 & 100.0\\
 
 \end{table}%
 
-The manipulation check for the question showed that respondents who were
-exposed to a stimulus that contained a question were significantly more
-likely to answer ``Yes'' to \texttt{Q24} (``Did the meme you just viewed
-contain a question?''; Table~\ref{tbl-mcheck}). Note that the control
-condition did not contain a question.
-
 \begin{table}
 
-\caption{\label{tbl-mcheck}Manipulation check for presence of a
-question.}
+\caption{\label{tbl-rexpcond}Number of respondents in the control and
+experimental conditions for the rain/geosmin issue.}
 
 \centering{
 
-\begin{tabular}[t]{l|r|r|r|r}
+\begin{tabular}[t]{l|r|r|r|r|r}
 \hline
-  & Control & No question, no curiosity prime & Question, no curiosity prime & Question, curiosity prime\\
+  & Freq & \% Valid & \% Valid Cum. & \% Total & \% Total Cum.\\
 \hline
-No & 16 & 17 & 6 & 6\\
+No curious, resolution & 60 & 24.9 & 24.9 & 23.1 & 23.1\\
 \hline
-Yes & 2 & 4 & 15 & 14\\
+No curious, no resolution & 60 & 24.9 & 49.8 & 23.1 & 46.2\\
+\hline
+Curious, resolution & 62 & 25.7 & 75.5 & 23.8 & 70.0\\
+\hline
+Curious, no resolution & 59 & 24.5 & 100.0 & 22.7 & 92.7\\
+\hline
+Total & 260 & 100.0 & 100.0 & 100.0 & 100.0\\
 \hline
 \end{tabular}
 
@@ -257,40 +264,22 @@ Yes & 2 & 4 & 15 & 14\\
 
 \section{Situational Curiosity}\label{situational-curiosity}
 
-Cleaned the items \texttt{Q25\_1} through \texttt{Q25\_4} and determined
-the Cronbach's alpha (\(\alpha = .95\)). Did not run a factor analysis
-since the correlation matrix showed high significant (\(p < .001\))
-inter-item correlations ranging from \(0.74\) to \(0.89\). Combined
-items in a mean index (\(M = 3.65\), \(SD = 1.65\)).
-
-There were no significant differences in the mean of situational
-curiosity across conditions (Figure~\ref{fig-means}).
+Cleaned the items \texttt{Q25\_1} through \texttt{Q25\_4} (astronomy)
+and \texttt{Q46\_1} through \texttt{Q46\_4} (rain/geosmin) and
+determined the Cronbach's alpha (astronomy: Cronbach's \(\alpha = .92\);
+rain/geosmin: Cronbach's \(\alpha = .93\)). Combined items in two mean
+indices.
 
 \begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-means-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-asitcur-1.pdf}}
 
 }
 
-\caption{\label{fig-means}Mean of situational curiosity by experimental
-condition.}
-
-\end{figure}%
-
-Examined the cleaned versions of the individual items (\texttt{Q25\_1c}
-thru \texttt{Q25\_4c}).
-
-\begin{figure}
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-means1-1.pdf}}
-
-}
-
-\caption{\label{fig-means1}Mean of Q25\_1c by experimental condition.}
+\caption{\label{fig-asitcur}Mean of situational curiosity by
+experimental condition for the astronomy issue.}
 
 \end{figure}%
 
@@ -298,11 +287,27 @@ thru \texttt{Q25\_4c}).
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-means2-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rsitcur-1.pdf}}
 
 }
 
-\caption{\label{fig-means2}Mean of Q25\_2c by experimental condition.}
+\caption{\label{fig-rsitcur}Mean of situational curiosity by
+experimental condition for the rain/geosmin issue.}
+
+\end{figure}%
+
+\section{Information Seeking}\label{information-seeking}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-ainfoseek-1.pdf}}
+
+}
+
+\caption{\label{fig-ainfoseek}Mean of information seeking by
+experimental condition for the astronomy issue.}
 
 \end{figure}%
 
@@ -310,11 +315,28 @@ thru \texttt{Q25\_4c}).
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-means3-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rinfoseek-1.pdf}}
 
 }
 
-\caption{\label{fig-means3}Mean of Q25\_3c by experimental condition.}
+\caption{\label{fig-rinfoseek}Mean of information seeking by
+experimental condition for the rain/geosmin issue.}
+
+\end{figure}%
+
+\section{Provided Closure}\label{provided-closure}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-aclosure-1.pdf}}
+
+}
+
+\caption{\label{fig-aclosure}Mean of index tapping the extent to which
+the information provided closure by experimental condition for the
+astronomy issue.}
 
 \end{figure}%
 
@@ -322,11 +344,13 @@ thru \texttt{Q25\_4c}).
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-means4-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rclosure-1.pdf}}
 
 }
 
-\caption{\label{fig-means4}Mean of Q25\_4c by experimental condition.}
+\caption{\label{fig-rclosure}Mean of index tapping the extent to which
+the information provided closure by experimental condition for the
+rain/geosmin issue.}
 
 \end{figure}%
 
