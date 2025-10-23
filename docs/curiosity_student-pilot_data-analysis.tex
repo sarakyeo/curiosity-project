@@ -1,5 +1,4 @@
 % Options for packages loaded elsewhere
-% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -8,22 +7,21 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-\usepackage{xcolor}
+
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
+  \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else
-  % xetex/luatex font selection
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -41,32 +39,22 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
-\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}{
-    \@ifstar
-      \xxxParagraphStar
-      \xxxParagraphNoStar
-  }
-  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
-  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}{
-    \@ifstar
-      \xxxSubParagraphStar
-      \xxxSubParagraphNoStar
-  }
-  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
-  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-\makeatother
 
 
-\usepackage{longtable,booktabs,array}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -78,33 +66,17 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Set default figure placement to htbp
+\makeatletter
 \def\fps@figure{htbp}
 \makeatother
-
-
-
-
-
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
- 
-
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -123,6 +95,10 @@
 \usepackage{fvextra}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 \KOMAoption{captions}{tableheading}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -159,14 +135,25 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
-\makeatother
-\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\usepackage{bookmark}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
+\urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Curiosity Project: Student Pilot Data Analysis (22-Oct-25)},
   colorlinks=true,
@@ -176,13 +163,12 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-
 \title{Curiosity Project: Student Pilot Data Analysis (22-Oct-25)}
 \author{}
 \date{}
+
 \begin{document}
 \maketitle
-
 \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
 showspaces = false,
 showtabs = false,
@@ -190,31 +176,29 @@ breaksymbolleft={},
 breaklines
 }
 
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, interior hidden, breakable, sharp corners, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+
 \renewcommand*\contentsname{Table of contents}
 {
 \hypersetup{linkcolor=}
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
-
 The raw data from the student pilot test contained 267 responses. After
 removing those who did not consent to participate, Aidan's test
 responses, and respondents who do not reside in the U.S., the final
 sample size is 263 respondents.
 
-\section{Experimental Conditions}\label{experimental-conditions}
-
 The random assignment to conditions appears to have worked fine. The
-number of respondents per condition ranged from 56-63
+number of respondents per condition ranged from 56 to 63
 (Table~\ref{tbl-aexpcond} and Table~\ref{tbl-rexpcond}).
 
+\hypertarget{tbl-aexpcond}{}
 \begin{table}
+\caption{\label{tbl-aexpcond}Number of respondents in the control and experimental conditions for the
+astronomy issue. }\tabularnewline
 
-\caption{\label{tbl-aexpcond}Number of respondents in the control and
-experimental conditions for the astronomy issue.}
-
-\centering{
-
+\centering
 \begin{tabular}[t]{l|r|r|r|r|r}
 \hline
   & Freq & \% Valid & \% Valid Cum. & \% Total & \% Total Cum.\\
@@ -230,18 +214,14 @@ Curious, no resolution & 56 & 23.3 & 100.0 & 21.5 & 92.3\\
 Total & 260 & 100.0 & 100.0 & 100.0 & 100.0\\
 \hline
 \end{tabular}
+\end{table}
 
-}
-
-\end{table}%
-
+\hypertarget{tbl-rexpcond}{}
 \begin{table}
+\caption{\label{tbl-rexpcond}Number of respondents in the control and experimental conditions for the
+rain/geosmin issue. }\tabularnewline
 
-\caption{\label{tbl-rexpcond}Number of respondents in the control and
-experimental conditions for the rain/geosmin issue.}
-
-\centering{
-
+\centering
 \begin{tabular}[t]{l|r|r|r|r|r}
 \hline
   & Freq & \% Valid & \% Valid Cum. & \% Total & \% Total Cum.\\
@@ -257,12 +237,7 @@ Curious, no resolution & 59 & 24.5 & 100.0 & 22.7 & 92.7\\
 Total & 260 & 100.0 & 100.0 & 100.0 & 100.0\\
 \hline
 \end{tabular}
-
-}
-
-\end{table}%
-
-\section{Situational Curiosity}\label{situational-curiosity}
+\end{table}
 
 Cleaned the items \texttt{Q25\_1} through \texttt{Q25\_4} (astronomy)
 and \texttt{Q46\_1} through \texttt{Q46\_4} (rain/geosmin) and
@@ -272,65 +247,51 @@ indices.
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-asitcur-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-asitcur-1.pdf}
 
 }
 
 \caption{\label{fig-asitcur}Mean of situational curiosity by
 experimental condition for the astronomy issue.}
 
-\end{figure}%
+\end{figure}
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rsitcur-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rsitcur-1.pdf}
 
 }
 
 \caption{\label{fig-rsitcur}Mean of situational curiosity by
 experimental condition for the rain/geosmin issue.}
 
-\end{figure}%
-
-\section{Information Seeking}\label{information-seeking}
+\end{figure}
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-ainfoseek-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-ainfoseek-1.pdf}
 
 }
 
 \caption{\label{fig-ainfoseek}Mean of information seeking by
 experimental condition for the astronomy issue.}
 
-\end{figure}%
+\end{figure}
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rinfoseek-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rinfoseek-1.pdf}
 
 }
 
 \caption{\label{fig-rinfoseek}Mean of information seeking by
 experimental condition for the rain/geosmin issue.}
 
-\end{figure}%
-
-\section{Provided Closure}\label{provided-closure}
+\end{figure}
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-aclosure-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-aclosure-1.pdf}
 
 }
 
@@ -338,13 +299,11 @@ experimental condition for the rain/geosmin issue.}
 the information provided closure by experimental condition for the
 astronomy issue.}
 
-\end{figure}%
+\end{figure}
 
 \begin{figure}
 
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rclosure-1.pdf}}
+{\centering \includegraphics{curiosity_student-pilot_data-analysis_files/figure-pdf/fig-rclosure-1.pdf}
 
 }
 
@@ -352,8 +311,247 @@ astronomy issue.}
 the information provided closure by experimental condition for the
 rain/geosmin issue.}
 
-\end{figure}%
+\end{figure}
 
+\hypertarget{tbl-asitcur}{}
+\begin{table}[!h]
+\caption{\label{tbl-asitcur}OLS regression predicting situational curiosity for the astronomy
+conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{235}\\
+Dependent variable & asitcur\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,232)} & \cellcolor{gray!10}{1.91}\\
+R² & 0.02\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{0.01}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{4.36} & \cellcolor{gray!10}{0.17} & \cellcolor{gray!10}{26.37} & \cellcolor{gray!10}{0.00}\\
+acuriousCurious & 0.09 & 0.19 & 0.45 & 0.65\\
+\cellcolor{gray!10}{aresoResolution} & \cellcolor{gray!10}{-0.37} & \cellcolor{gray!10}{0.19} & \cellcolor{gray!10}{-1.91} & \cellcolor{gray!10}{0.06}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{tbl-rsitcur}{}
+\begin{table}[!h]
+\caption{\label{tbl-rsitcur}OLS regression predicting situational curiosity for the rain/geosmin
+conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{237}\\
+Dependent variable & rsitcur\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,234)} & \cellcolor{gray!10}{0.06}\\
+R² & 0.00\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{-0.01}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{4.60} & \cellcolor{gray!10}{0.16} & \cellcolor{gray!10}{28.21} & \cellcolor{gray!10}{0.00}\\
+rcuriousCurious & -0.06 & 0.19 & -0.34 & 0.73\\
+\cellcolor{gray!10}{rresoResolution} & \cellcolor{gray!10}{-0.01} & \cellcolor{gray!10}{0.19} & \cellcolor{gray!10}{-0.07} & \cellcolor{gray!10}{0.95}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{tbl-ainfoseek}{}
+\begin{table}[!h]
+\caption{\label{tbl-ainfoseek}OLS regression predicting likelihood of seeking information for the
+astronomy conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{235}\\
+Dependent variable & ainfoseek\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,232)} & \cellcolor{gray!10}{1.31}\\
+R² & 0.01\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{0.00}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{3.24} & \cellcolor{gray!10}{0.18} & \cellcolor{gray!10}{18.33} & \cellcolor{gray!10}{0.00}\\
+acuriousCurious & 0.06 & 0.21 & 0.28 & 0.78\\
+\cellcolor{gray!10}{aresoResolution} & \cellcolor{gray!10}{-0.33} & \cellcolor{gray!10}{0.21} & \cellcolor{gray!10}{-1.60} & \cellcolor{gray!10}{0.11}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{tbl-rinfoseek}{}
+\begin{table}[!h]
+\caption{\label{tbl-rinfoseek}OLS regression predicting likelihood of seeking information for the
+rain/geosmin conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{237}\\
+Dependent variable & rinfoseek\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,234)} & \cellcolor{gray!10}{0.73}\\
+R² & 0.01\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{-0.00}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{3.42} & \cellcolor{gray!10}{0.17} & \cellcolor{gray!10}{20.01} & \cellcolor{gray!10}{0.00}\\
+rcuriousCurious & -0.22 & 0.20 & -1.09 & 0.28\\
+\cellcolor{gray!10}{rresoResolution} & \cellcolor{gray!10}{-0.10} & \cellcolor{gray!10}{0.20} & \cellcolor{gray!10}{-0.48} & \cellcolor{gray!10}{0.63}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{tbl-aclosure}{}
+\begin{table}[!h]
+\caption{\label{tbl-aclosure}OLS regression predicting the extent to which the information provided
+closure for participants in the astronomy conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{235}\\
+Dependent variable & aclosure\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,232)} & \cellcolor{gray!10}{12.58}\\
+R² & 0.10\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{0.09}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{2.17} & \cellcolor{gray!10}{0.16} & \cellcolor{gray!10}{13.52} & \cellcolor{gray!10}{0.00}\\
+acuriousCurious & 0.47 & 0.19 & 2.50 & 0.01\\
+\cellcolor{gray!10}{aresoResolution} & \cellcolor{gray!10}{0.80} & \cellcolor{gray!10}{0.19} & \cellcolor{gray!10}{4.27} & \cellcolor{gray!10}{0.00}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\hypertarget{tbl-rclosure}{}
+\begin{table}[!h]
+\caption{\label{tbl-rclosure}OLS regression predicting the extent to which the information provided
+closure for participants in the rain/geosmin conditions. }\tabularnewline
+
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{Observations} & \cellcolor{gray!10}{237}\\
+Dependent variable & rclosure\\
+\cellcolor{gray!10}{Type} & \cellcolor{gray!10}{OLS linear regression}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{tabular}{lr}
+\toprule
+\cellcolor{gray!10}{F(2,234)} & \cellcolor{gray!10}{35.86}\\
+R² & 0.23\\
+\cellcolor{gray!10}{Adj. R²} & \cellcolor{gray!10}{0.23}\\
+\bottomrule
+\end{tabular}
+\end{table} \begin{table}[!h]
+\centering
+\begin{threeparttable}
+\begin{tabular}{lrrrr}
+\toprule
+  & Est. & S.E. & t val. & p\\
+\midrule
+\cellcolor{gray!10}{(Intercept)} & \cellcolor{gray!10}{2.58} & \cellcolor{gray!10}{0.17} & \cellcolor{gray!10}{15.47} & \cellcolor{gray!10}{0.00}\\
+rcuriousCurious & -0.20 & 0.19 & -1.04 & 0.30\\
+\cellcolor{gray!10}{rresoResolution} & \cellcolor{gray!10}{1.62} & \cellcolor{gray!10}{0.19} & \cellcolor{gray!10}{8.42} & \cellcolor{gray!10}{0.00}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item Standard errors: OLS
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
 
 
 

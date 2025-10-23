@@ -37,8 +37,6 @@ source(here::here("scripts", "01_setup.R"))
 
 The raw data from the student pilot test contained 267 responses. After removing those who did not consent to participate, Aidan's test responses, and respondents who do not reside in the U.S., the final sample size is 263 respondents.
 
-# Experimental Conditions
-
 ```{r}
 #| label: exp-cond
 
@@ -46,7 +44,7 @@ source(here::here("scripts", "02_exp-cond.R"))
 
 ```
 
-The random assignment to conditions appears to have worked fine. The number of respondents per condition ranged from 56-63 (@tbl-aexpcond and @tbl-rexpcond).
+The random assignment to conditions appears to have worked fine. The number of respondents per condition ranged from 56 to 63 (@tbl-aexpcond and @tbl-rexpcond).
 
 ```{r}
 #| label: tbl-aexpcond
@@ -69,8 +67,6 @@ pilot |> freq(rstim) |>
         kbl(digits = 1)
 
 ```
-
-# Situational Curiosity
 
 ```{r}
 #| label: DVs
@@ -131,8 +127,6 @@ pilot |>
 
 ```
 
-# Information Seeking
-
 ```{r}
 #| label: fig-ainfoseek
 #| output: TRUE
@@ -183,8 +177,6 @@ pilot |>
 
 ```
 
-# Provided Closure
-
 ```{r}
 #| label: fig-aclosure
 #| output: TRUE
@@ -232,5 +224,84 @@ pilot |>
               axis.title.y = element_text(size = 12, face = "plain"),
               axis.text = element_text(size = 12, face = "plain"),
               axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+```{r}
+#| label: tbl-asitcur
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting situational curiosity for the astronomy conditions."
+
+pilot |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+        na.omit() |> 
+        lm(formula = asitcur ~ acurious + areso) |> 
+        summ()
+
+```
+
+```{r}
+#| label: tbl-rsitcur
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting situational curiosity for the rain/geosmin conditions."
+
+pilot |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
+        na.omit() |> 
+        lm(formula = rsitcur ~ rcurious + rreso) |> 
+        summ()
+
+```
+
+```{r}
+#| label: tbl-ainfoseek
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting likelihood of seeking information for the astronomy conditions."
+
+pilot |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+        na.omit() |> 
+        lm(formula = ainfoseek ~ acurious + areso) |> 
+        summ()
+
+```
+
+```{r}
+#| label: tbl-rinfoseek
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting likelihood of seeking information for the rain/geosmin conditions."
+
+pilot |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
+        na.omit() |> 
+        lm(formula = rinfoseek ~ rcurious + rreso) |> 
+        summ()
+
+```
+
+```{r}
+#| label: tbl-aclosure
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting the extent to which the information provided closure for participants in the astronomy conditions."
+
+pilot |> 
+        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+        na.omit() |> 
+        lm(formula = aclosure ~ acurious + areso) |> 
+        summ()
+
+```
+
+```{r}
+#| label: tbl-rclosure
+#| output: TRUE
+#| tbl-cap: "OLS regression predicting the extent to which the information provided closure for participants in the rain/geosmin conditions."
+
+pilot |> 
+        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
+        na.omit() |> 
+        lm(formula = rclosure ~ rcurious + rreso) |> 
+        summ()
 
 ```
