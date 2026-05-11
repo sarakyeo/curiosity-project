@@ -39,6 +39,7 @@ Data for this project were collected between May 5-10, 2026, via Qualtrics. The 
 
 ```{r}
 #| label: descriptives
+#| output: TRUE
 
 cdata |> 
     select(age, female, educ, Hispanic, Black, White) |> 

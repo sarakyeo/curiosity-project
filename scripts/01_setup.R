@@ -64,7 +64,7 @@ cdata |> freq(Q5n)
 cdata <- cdata |> 
         rowwise() |> 
         mutate(age = 2026 - Q5n)
-cdata |> freq(age)
+cdata |> freq(age) # 1 missing data point
 cdata |>
         group_by() |> 
         descr(age) # M = 47.3, SD = 17.2; min = 19; max = 86
