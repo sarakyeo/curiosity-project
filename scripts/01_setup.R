@@ -2,7 +2,6 @@
 # Load packages -------------------
 
 library(tidyverse)
-# library(infer)
 library(weights)
 library(rstatix)
 library(summarytools)
@@ -42,57 +41,129 @@ var_remove <- function(vars, data){
 
 # Load data ---------------------------------------------------------------
 
-pilot <- read_csv(here::here("data", "curiosity-data-F25.csv"))
-glimpse(pilot) # 267 rows, 126 columns
+cdata <- read_csv(here::here("data", "curiosity-final-data_April-2026.csv"))
+glimpse(cdata) # 1,002 rows, 134 columns
 
 
 # Filtering out those who did not consent to participate --------------------------------
 
-pilot |> freq(Q2) # 2 R (respondents) did not consent
-pilot <- pilot |> 
-        filter(Q2 == "Yes") # keep those who responded "Yes" to Q2 in data frame; 265 R remaining
+cdata |> freq(Q2) # 1,000 consented
+cdata <- cdata |> 
+        filter(Q2 == "Yes") # keep those who responded "Yes" to Q2 in data frame; 1,000 R remaining
 
 # Filtering out those who do not live in the US -----------
 
-pilot |> freq(Q3) # 263 R reside in
-pilot <- pilot |> 
-        filter(Q3 == "Yes") # removed 2 obs; 263 R remaining
+cdata |> freq(Q3) # 1,000 R reside in the US; no need to filter
 
 
 # Check R age ----------------
-pilot |> freq(Q5)
-pilot <- pilot |> 
+cdata |> freq(Q5)
+cdata <- cdata |> 
+        mutate(Q5n = as.numeric(Q5))
+cdata |> freq(Q5n)
+cdata <- cdata |> 
         rowwise() |> 
-        mutate(age = 2025 - Q5)
-pilot |> freq(age)
-pilot |>
+        mutate(age = 2026 - Q5n)
+cdata |> freq(age)
+cdata |>
         group_by() |> 
-        descr(age) # M = 21.0, SD = 3.62; min = 18
+        descr(age) # M = 47.3, SD = 17.2; min = 19; max = 86
 
 
 # Demographics --------------------
-## Race ----------
-pilot |> freq(Q8_5) # 230 R identify as White
-pilot <- pilot |>
-        mutate(
-                white = case_when(
-                        Q8_5 == "White" ~ "White",
-                        is.na(Q8_5) == TRUE ~ "non-White"
-                )) |> 
-        mutate(
-                white = factor(
-                        white,
-                        levels = c("non-White", "White")
-                ))
-pilot |> freq(white) # 87.5 % White
+## Gender ---------------
+cdata |> freq(Q6) # 520 (52%) female, 480 (48%) male
+cdata <- cdata |> 
+  mutate(
+        female = factor(
+                Q6,
+                levels = c("Female", "Male")
+        ))
+cdata |> freq(female)
+
+## Education --------------
+cdata |> freq(Q7)
+cdata <- cdata |> 
+  mutate(
+        educ = factor(
+                Q7,
+                levels = c(
+                        "Less than high school",
+                        "High school graduate",
+                        "Some college",
+                        "2 year degree (e.g., associate degree)",
+                        "4 year college degree (e.g., bachelor's degree)",
+                        "Advanced degree (e.g., graduate school, JD, MD, PhD)"
+                )
+        ))
+cdata |> freq(educ)
+cdata <- cdata |> 
+  mutate(educn = as.numeric(educ))
+cdata |> freq(educn)
+cdata |> 
+  group_by() |> 
+  descr(educn) # Median = "2 year degree (e.g., associate degree)"
+
+## Race and Ethnicity --------------
+cdata |> freq(Q9) # 355 Hispanic
+cdata <- cdata |> 
+  mutate(Hispanic = case_when(
+        Q9 == "Yes" ~ "Hispanic",
+        Q9 == "No" ~ "Non-Hispanic"
+  )) |> 
+  mutate(
+        Hispanic = factor(
+                Hispanic,
+                levels = c("Non-Hispanic", "Hispanic")
+        ))
+cdata |> freq(Hispanic) # 355 Hispanic (35.5%)
+
+cdata |> freq(Q10)
+cdata <- cdata |> 
+  mutate(
+        White = case_when(
+                Q10 == "White" ~ "White",
+                Q10 != "White" ~ "Non-White"
+        )) |> 
+  mutate(White = factor(
+        White,
+        levels = c("Non-White", "White")
+  ))
+cdata |> freq(White) # 544 White (54.4%)
+
+cdata <- cdata |> 
+  mutate(
+        Black = case_when(
+                Q10 == "Black or African American" ~ "Black",
+                Q10 != "Black or African American" ~ "Non-Black"
+        )) |> 
+  mutate(
+        Black = factor(
+                Black,
+                levels = c("Non-Black", "Black")
+        ))
+cdata |> freq(Black) # 338 Black (33.8%)
 
 
-# Check student names ---------------------------------
-# Need to get rid of test responses that I know are either Aidan's or Casey's responses
-pilot |> freq(Q52_1)
-pilot <- pilot |>
-        filter(Q52_1 != "aidan craig sundine" | is.na(Q52_1)) |>
-        filter(Q52_1 != "Aidan Craig Sundine" | is.na(Q52_1)) # 260 R remaining
-
-
-
+## Household income ------------------
+cdata |> freq(Q11)
+cdata <- cdata |> 
+  mutate(
+        HHinc = case_when(
+                Q11 == "Less than $10,000" ~ 1,
+                Q11 == "$10,000 to $19,999" ~ 2,
+                Q11 == "$20,000 to $29,999" ~ 3,
+                Q11 == "$30,000 to $39,999" ~ 4,
+                Q11 == "$40,000 to $49,999" ~ 5,
+                Q11 == "$50,000 to $59,999" ~ 6,
+                Q11 == "$60,000 to $69,999" ~ 7,
+                Q11 == "$70,000 to $79,999" ~ 8,
+                Q11 == "$80,000 to $89,999" ~ 9,
+                Q11 == "$90,000 to $99,999" ~ 10,
+                Q11 == "$100,000 to $149,999" ~ 11,
+                Q11 == "$150,000 or more" ~ 12,
+        ))
+cdata |> freq(HHinc)
+cdata |> 
+  group_by() |> 
+  descr(HHinc) # Median = "$50,000 to $59,999"

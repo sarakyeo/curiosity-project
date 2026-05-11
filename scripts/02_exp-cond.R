@@ -2,17 +2,17 @@
 # Creating experimental conditions ----------------------------------------
 ## Issue: Rain, Astro
 ## Astronomy experimental conditions: Q14, Q17, Q20, Q23 ----------------------
-pilot |> freq(`Q14_Page Submit`)
-pilot |> freq(`Q17_Page Submit`)
 pilot |> freq(`Q20_Page Submit`)
-pilot |> freq(`Q23_Page Submit`)
+pilot |> freq(`Q22_Page Submit`)
+pilot |> freq(`Q24_Page Submit`)
+pilot |> freq(`Q26_Page Submit`)
 
 pilot <- pilot |> 
         mutate(astim = case_when(
-                `Q14_Page Submit` == `Q14_Page Submit` ~ "No curious, no resolution",
-                `Q17_Page Submit` == `Q17_Page Submit` ~ "No curious, resolution",
-                `Q20_Page Submit` == `Q20_Page Submit` ~ "Curious, no resolution",
-                `Q23_Page Submit` == `Q23_Page Submit` ~ "Curious, resolution",
+                `Q20_Page Submit` == `Q20_Page Submit` ~ "No curious, resolution",
+                `Q22_Page Submit` == `Q22_Page Submit` ~ "No curious, no resolution",
+                `Q24_Page Submit` == `Q24_Page Submit` ~ "Curious, resolution",
+                `Q26_Page Submit` == `Q26_Page Submit` ~ "Curious, no resolution",
         )) |> 
         mutate(astim = factor(
                 astim,

@@ -1,0 +1,53 @@
+---
+title: "Curiosity Project: Qualtrics Data Analysis (April 2026)"
+format: 
+  html:
+        toc: true
+        number-sections: true
+  pdf:
+        toc: true
+        number-sections: true
+        keep-tex: true
+        include-in-header:
+                text: |
+                  \usepackage{fvextra}
+                  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+        include-before-body: 
+                text: |
+                  \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
+                  showspaces = false,
+                  showtabs = false,
+                  breaksymbolleft={},
+                  breaklines
+                  }
+execute: 
+  echo: false
+  output: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+
+source(here::here("scripts", "01_setup.R"))
+
+```
+
+Data for this project were collected between May 5-10, 2026, via Qualtrics. The raw data file contained $1,002$ responses. Of these, $1,000$ respondents who live in the US consented to participate.
+
+```{r}
+#| label: descriptives
+
+cdata |> 
+    select(age, female, educ, Hispanic, Black, White) |> 
+    gtsummary::tbl_summary(
+include = c(age, grade, response, trt),
+        statistic = list(all_continuous() ~ "{mean} ({sd})", 
+        all_categorical() ~ "{n} ({p}%)",
+        digits = list(age = c(0, 1))
+        ))
+
+```
+

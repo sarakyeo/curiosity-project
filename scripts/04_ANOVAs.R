@@ -40,3 +40,13 @@ pilot |>
         na.omit() |> 
         lm(formula = rclosure ~ rcurious + rreso) |> 
         summ()
+
+
+# Examining correlations between DVs --------------
+pilot |> 
+        select(asitcur, ainfoseek, aclosure) |> 
+        cor_pmat()
+
+pilot |> 
+        select(rsitcur, rinfoseek, rclosure) |> 
+        cor_pmat()
