@@ -38,8 +38,9 @@ source(here::here("scripts", "01_setup.R"))
 Data for this project were collected between May 5-10, 2026, via Qualtrics. The raw data file contained $1,002$ responses. Of these, $1,000$ respondents who live in the US consented to participate.
 
 ```{r}
-#| label: descriptives
+#| label: tbl-descriptives
 #| output: TRUE
+#| tbl-cap: Demographics of the sample.
 
 cdata |> 
     select(age, female, educ, Hispanic, Black, White) |> 
@@ -51,3 +52,38 @@ cdata |>
 
 ```
 
+# Experimental Conditions
+The experiment embedded in the online survey has a 2 (curiosity prime: absent/present) $\times$ 2 (inclusion of resolution: absent/present) between-subjects design (@tbl-exp-cond). Respondents were randomly assigned to experimental conditions.
+
+```{r}
+#| label: exp-cond
+
+source(here::here("scripts", "02_exp-cond.R"))
+
+```
+
+```{r}
+#| label: tbl-exp-cond
+#| output: TRUE
+#| tbl-cap: Experimental conditions.
+
+cdata |> 
+  select(stim, cstim, rstim) |> 
+  gtsummary::tbl_summary(
+    label = list(
+      stim = "All experimental conditions",
+      cstim = "Curiosity conditions",
+      rstim = "Resolution conditions"
+    ))
+
+```
+
+# Dependent Variable Sets
+We also split the sample randomly into separate variables. 
+
+```{r}
+cdata |> 
+ count(stim, DVset) |> 
+  pivot_wider(names_from = stim, values_from = n)
+
+```
