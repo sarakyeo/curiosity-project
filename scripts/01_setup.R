@@ -39,9 +39,14 @@ var_remove <- function(vars, data){
 
 
 # Load data ---------------------------------------------------------------
-
 cdata <- read_csv(here::here("data", "curiosity-data-qualtrics_April-2026.csv"))
 glimpse(cdata) # 1,002 rows, 134 columns
+
+
+# Make weight variable numeric --------
+cdata <- cdata |> 
+  mutate(wtvar = as.numeric(Weight))
+cdata |> freq(wtvar)
 
 
 # Filtering out those who did not consent to participate --------------------------------
@@ -68,6 +73,12 @@ cdata |>
         group_by() |> 
         descr(age) # M = 47.3, SD = 17.2; min = 19; max = 86
 
+## Weighted age -----
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  group_by() |> 
+  summarize(M = survey_mean(age, na.rm = TRUE),
+            SD = survey_sd(age, na.rm = TRUE)) # M = 49.0, SD = 17.6
 
 # Demographics --------------------
 ## Gender ---------------
@@ -79,6 +90,13 @@ cdata <- cdata |>
                 levels = c("Female", "Male")
         ))
 cdata |> freq(female) # 52% female, 48% male
+
+### Weighted gender -----------
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  group_by(female) |> 
+  survey_tally() # 527 female (52.7%), 473 male (47.3%)
+
 
 ## Education --------------
 cdata |> freq(Q7)
@@ -102,6 +120,13 @@ cdata |> freq(educn)
 cdata |> 
   group_by() |> 
   descr(educn) # Median = "2 year degree (e.g., associate degree)"
+
+
+## Weighted median for education --------------
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  summarize(M = survey_quantile(educn, quantiles = .5)) # Median: 2-year degree
+
 
 ## Race and Ethnicity --------------
 cdata |> freq(Q9) # 355 Hispanic
@@ -154,6 +179,23 @@ cdata <- cdata |>
 cdata |> freq(Black) # 357 Black (35.7%)
 
 
+### Weighted race and ethnicity -----------
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  group_by(White) |> 
+  survey_tally() # 247 Non-white (24.7%), 753 White (75.3%)
+
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  group_by(Black) |> 
+  survey_tally() # 845 Non-Black (84.5%), 155 Black (15.5%)
+
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  group_by(Hispanic) |> 
+  survey_tally() # 200 Hispanic (20%); 800 Non-Hispanic (80%)
+
+
 ## Household income ------------------
 cdata |> freq(Q11)
 cdata <- cdata |> 
@@ -176,3 +218,9 @@ cdata |> freq(HHinc)
 cdata |> 
   group_by() |> 
   descr(HHinc) # Median = "$50,000 to $59,999"
+
+
+## Weighted median for income --------------
+cdata |> 
+  as_survey(weights = c(wtvar)) |> 
+  summarize(M = survey_quantile(HHinc, quantiles = .5)) # Median: $50,000 to $59,999
