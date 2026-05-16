@@ -13,7 +13,6 @@ library(huxtable)
 library(gtsummary)
 library(kableExtra)
 library(gridExtra)
-library(gtsummary)
 library(labelled)
 library(srvyr)
 library(tidyLPA)
@@ -41,7 +40,7 @@ var_remove <- function(vars, data){
 
 # Load data ---------------------------------------------------------------
 
-cdata <- read_csv(here::here("data", "curiosity-final-data_April-2026.csv"))
+cdata <- read_csv(here::here("data", "curiosity-data-qualtrics_April-2026.csv"))
 glimpse(cdata) # 1,002 rows, 134 columns
 
 
@@ -79,7 +78,7 @@ cdata <- cdata |>
                 Q6,
                 levels = c("Female", "Male")
         ))
-cdata |> freq(female)
+cdata |> freq(female) # 52% female, 48% male
 
 ## Education --------------
 cdata |> freq(Q7)
@@ -118,31 +117,41 @@ cdata <- cdata |>
         ))
 cdata |> freq(Hispanic) # 355 Hispanic (35.5%)
 
-cdata |> freq(Q10)
+cdata |> 
+  select(Q10_1:Q10_5) |> 
+  freq()
 cdata <- cdata |> 
   mutate(
         White = case_when(
-                Q10 == "White" ~ "White",
-                Q10 != "White" ~ "Non-White"
+                Q10_5 == "White" ~ "White",
+                Q10_1 == Q10_1 ~ "Non-White",
+                Q10_2 == Q10_2 ~ "Non-White",
+                Q10_3 == Q10_3 ~ "Non-White",
+                Q10_4 == Q10_4 ~ "Non-White",
+                Q10_6 == Q10_6 ~ "Non-White"
         )) |> 
   mutate(White = factor(
         White,
         levels = c("Non-White", "White")
   ))
-cdata |> freq(White) # 544 White (54.4%)
+cdata |> freq(White) # 567 White (56.7%)
 
 cdata <- cdata |> 
   mutate(
         Black = case_when(
-                Q10 == "Black or African American" ~ "Black",
-                Q10 != "Black or African American" ~ "Non-Black"
+                Q10_3 == "Black or African American" ~ "Black",
+                Q10_1 == Q10_1 ~ "Non-Black",
+                Q10_2 == Q10_2 ~ "Non-Black",
+                Q10_5 == Q10_5 ~ "Non-Black",
+                Q10_4 == Q10_4 ~ "Non-Black",
+                Q10_6 == Q10_6 ~ "Non-Black"
         )) |> 
   mutate(
         Black = factor(
                 Black,
                 levels = c("Non-Black", "Black")
         ))
-cdata |> freq(Black) # 338 Black (33.8%)
+cdata |> freq(Black) # 357 Black (35.7%)
 
 
 ## Household income ------------------
