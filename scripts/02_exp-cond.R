@@ -13,10 +13,10 @@ cdata |>
 cdata <- cdata |> 
         mutate(
                 stim = case_when(
-                        `Q20_Page Submit` == `Q20_Page Submit` ~ "No curiosity, Resolution",
-                        `Q22_Page Submit` == `Q22_Page Submit` ~ "No curiosity, No resolution",
-                        `Q24_Page Submit` == `Q24_Page Submit` ~ "Curiosity, Resolution",
-                        `Q26_Page Submit` == `Q26_Page Submit` ~ "Curiosity, No resolution",
+                        `Q20_Page Submit` == `Q20_Page Submit` ~ "Curiosity, Resolution",
+                        `Q22_Page Submit` == `Q22_Page Submit` ~ "No curiosity, Resolution",
+                        `Q24_Page Submit` == `Q24_Page Submit` ~ "Curiosity, No resolution",
+                        `Q26_Page Submit` == `Q26_Page Submit` ~ "No curiosity, No resolution",
                 )) |> 
         mutate(
                 stim = factor(
@@ -31,10 +31,10 @@ cdata <- cdata |>
 cdata |> freq(stim)
 #                                     Freq   % Valid   % Valid Cum.   % Total   % Total Cum.
 # --------------------------------- ------ --------- -------------- --------- --------------
-#          No curiosity, Resolution    251     25.10          25.10     25.10          25.10
-#       No curiosity, No resolution    262     26.20          51.30     26.20          51.30
-#             Curiosity, Resolution    256     25.60          76.90     25.60          76.90
-#          Curiosity, No resolution    231     23.10         100.00     23.10         100.00
+#          No curiosity, Resolution    262     26.20          26.20     26.20          26.20
+#       No curiosity, No resolution    231     23.10          49.30     23.10          49.30
+#             Curiosity, Resolution    251     25.10          74.40     25.10          74.40
+#          Curiosity, No resolution    256     25.60         100.00     25.60         100.00
 #                              <NA>      0                               0.00         100.00
 #                             Total   1000    100.00         100.00    100.00         100.00
 
@@ -56,10 +56,17 @@ cdata <- cdata |>
 cdata |> freq(cstim)
 #                      Freq   % Valid   % Valid Cum.   % Total   % Total Cum.
 # ------------------ ------ --------- -------------- --------- --------------
-#       No curiosity    513     51.30          51.30     51.30          51.30
-#          Curiosity    487     48.70         100.00     48.70         100.00
+#       No curiosity    493     49.30          49.30     49.30          49.30
+#          Curiosity    507     50.70         100.00     50.70         100.00
 #               <NA>      0                               0.00         100.00
 #              Total   1000    100.00         100.00    100.00         100.00
+
+cdata <- cdata |> 
+        mutate(ncstim = case_when(
+                cstim == "Curiosity" ~ 1,
+                cstim == "No curiosity" ~ 0
+        ))
+cdata |> freq(ncstim)
 
 
 ## Resolution conditions ------------------
@@ -79,11 +86,17 @@ cdata <- cdata |>
 cdata |> freq(rstim)
 #                       Freq   % Valid   % Valid Cum.   % Total   % Total Cum.
 # ------------------- ------ --------- -------------- --------- --------------
-#       No resolution    493     49.30          49.30     49.30          49.30
-#          Resolution    507     50.70         100.00     50.70         100.00
+#       No resolution    487     48.70          48.70     48.70          48.70
+#          Resolution    513     51.30         100.00     51.30         100.00
 #                <NA>      0                               0.00         100.00
 #               Total   1000    100.00         100.00    100.00         100.00
 
+cdata <- cdata |> 
+        mutate(nrstim = case_when(
+                rstim == "Resolution" ~ 1,
+                rstim == "No resolution" ~ 0
+        ))
+cdata |> freq(nrstim) 
 
 # Check DV assignment ---------------------
 cdata |> freq(`2nd_order`) # 497 assigned to DV set 1; 503 assigned to DV set 2
