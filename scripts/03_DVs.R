@@ -82,3 +82,76 @@ cdata |>
         group_by() |> 
         descr(dialogue) # M = 4.66, SD = 1.77
 
+
+# Create interest as control variable --------------------
+cdata |> freq(Q12_5)
+cdata <- var_recode(data = cdata, vars = Q12_5)
+cdata |> freq(Q12_5c)
+cdata <- cdata |> 
+        mutate(interest = Q12_5c)
+cdata |> freq(interest)
+cdata |>
+        group_by() |>
+        descr(interest) # M = 4.60, SD = 1.96
+
+
+# Create trait curiosity as control variable -------------------
+cdata |> 
+        select(Q14_1:Q14_4) |> 
+        freq()
+cdata <- var_recode(data = cdata, vars = Q14_1:Q14_4)
+cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        freq()
+
+## Factor analysis ---------------
+cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        cortest.bartlett() # sig.
+cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        KMO() # Overall MSA = 0.84
+cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        fa.parallel() # 1 factor, 1 component
+fa <- cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        fa(
+                .,
+                nfactors = 1,
+                fm = "pa",
+                max.iter = 100,
+                rotate = "promax"
+        )
+fa |> fa.diagram()
+print(fa$loadings, cutoff = .3, digits = 3)
+
+cdata |> 
+        select(Q14_1c:Q14_4c) |> 
+        group_by() |> 
+        psych::alpha() # Cronbach's alpha = 0.89
+
+cdata <- cdata |>
+        mutate(
+                dispcurious = mean(
+                        c(Q14_1c, Q14_2c, Q14_3c, Q14_4c),
+                        na.rm = TRUE
+                ))
+cdata |> freq(dispcurious)
+cdata |> 
+        group_by() |> 
+        descr(dispcurious) # M = 5.42, SD = 1.35
+
+
+# OLS path models --------------------------------
+# PROCESS cannot handle sample weights
+mcur <- cdata |> 
+        filter(DVset == "DV set 1: Info Seeking") |> 
+        select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
+        lm(formula = curiosity ~ ncstim + nrstim + dispcurious + interest, weights = wtvar)
+
+mdialogue <- cdata |> 
+        filter(DVset == "DV set 1: Info Seeking") |> 
+        select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
+        lm(formula = dialogue ~ ncstim + nrstim + curiosity + dispcurious + interest, weights = wtvar)
+
