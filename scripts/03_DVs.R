@@ -143,19 +143,66 @@ cdata |>
         descr(dispcurious) # M = 5.42, SD = 1.35
 
 
+# Create frustration as a mediator --------------
+cdata |> 
+        select(Q27_9:Q27_10) |> 
+        freq()
+cdata <- var_recode(data = cdata, vars = c(Q27_9:Q27_10))
+cdata |> 
+        select(Q27_9c:Q27_10c) |> 
+        freq()
+cdata |> 
+        select(Q27_9c:Q27_10c) |> 
+        cor_test() # Pearson's r. = .82, p < .001
+cdata <- cdata |> 
+        mutate(
+                frustration = mean(
+                        c(Q27_9c, Q27_10c),
+                        na.rm = TRUE
+                ))
+cdata |> freq(frustration)
+cdata |> 
+        group_by() |> 
+        descr(frustration) # M = 2.53, SD = 2.03
+
+
 # OLS path models --------------------------------
 # PROCESS cannot handle sample weights
 mcur <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
-        select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
-        lm(formula = curiosity ~ ncstim + nrstim + dispcurious, weights = wtvar)
+        select(ncstim, nrstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = curiosity ~ ncstim + nrstim + frustration + dispcurious, weights = wtvar)
 
-mdialogue <- cdata |> 
+mfrus <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
-        select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
-        lm(formula = dialogue ~ ncstim + nrstim + curiosity + dispcurious + dispcurious:cstim, weights = wtvar)
+        select(ncstim, nrstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = frustration ~ ncstim + nrstim + curiosity + dispcurious, weights = wtvar)
 
-huxreg("Curiosity" = mcur, "Dialogue" = mdialogue)
+mdialogue <- cdata |>
+        filter(DVset == "DV set 1: Info Seeking") |>
+        select(
+                ncstim,
+                nrstim,
+                dialogue,
+                curiosity,
+                frustration,
+                interest,
+                dispcurious,
+                wtvar
+        ) |>
+        lm(
+                formula = dialogue ~ ncstim +
+                        nrstim +
+                        curiosity +
+                        frustration +
+                        dispcurious +
+                        dispcurious:ncstim +
+                        curiosity:ncstim +
+                        frustration:ncstim,
+                weights = wtvar
+        )
+
+huxreg("Curiosity" = mcur, "Frustation" = mfrus, "Dialogue" = mdialogue)
 
 cdata |> 
         select(dispcurious, interest, curiosity, dialogue) |> 
