@@ -148,10 +148,45 @@ cdata |>
 mcur <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
         select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
-        lm(formula = curiosity ~ ncstim + nrstim + dispcurious + interest, weights = wtvar)
+        lm(formula = curiosity ~ ncstim + nrstim + dispcurious, weights = wtvar)
 
 mdialogue <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
         select(ncstim, nrstim, dialogue, curiosity, interest, dispcurious, wtvar) |> 
-        lm(formula = dialogue ~ ncstim + nrstim + curiosity + dispcurious + interest, weights = wtvar)
+        lm(formula = dialogue ~ ncstim + nrstim + curiosity + dispcurious + dispcurious:cstim, weights = wtvar)
 
+huxreg("Curiosity" = mcur, "Dialogue" = mdialogue)
+
+cdata |> 
+        select(dispcurious, interest, curiosity, dialogue) |> 
+        cor_pmat()
+
+interact_plot(
+        model = mdialogue,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.type = c("confidence"),
+        int.width = 0.95,
+)
+interact_plot(
+        mdialogue,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.width = .95,
+        legend.main = "Dispositional / Trait Curiosity"
+) +
+        scale_y_continuous(
+                name = "Dialogic intentions",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        ) +
+        scale_x_discrete(
+                name = "",
+                labels = c(
+                        "Curiosity prime",
+                        "No curiosity prime"
+                )) +
+        jtools::theme_apa()
