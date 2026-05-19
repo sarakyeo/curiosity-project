@@ -25,7 +25,7 @@ cdata |>
         descr(curiosity, weights = cdata$wtvar) # M = 5.49, SD = 1.50
 
 
-# Dialogue (Q29_6, Q29_7) ---------------------------------
+# DV: Dialogue (Q29_6:Q29_13) ---------------------------------
 cdata |> 
         select(Q29_6:Q29_13) |> 
         freq()
@@ -197,20 +197,19 @@ mdialogue <- cdata |>
                         frustration +
                         dispcurious +
                         dispcurious:ncstim +
-                        curiosity:ncstim +
-                        frustration:ncstim,
+                        dispcurious:nrstim,
                 weights = wtvar
         )
 
 huxreg("Curiosity" = mcur, "Frustation" = mfrus, "Dialogue" = mdialogue)
 
 cdata |> 
-        select(dispcurious, interest, curiosity, dialogue) |> 
+        select(dispcurious, frustration, curiosity, dialogue) |> 
         cor_pmat()
 
 interact_plot(
         model = mdialogue,
-        pred = cstim,
+        pred = ncstim,
         modx = dispcurious,
         interval = TRUE,
         int.type = c("confidence"),
@@ -218,11 +217,11 @@ interact_plot(
 )
 interact_plot(
         mdialogue,
-        pred = cstim,
+        pred = ncstim,
         modx = dispcurious,
         interval = TRUE,
         int.width = .95,
-        legend.main = "Dispositional / Trait Curiosity"
+        legend.main = "Dispositional curiosity"
 ) +
         scale_y_continuous(
                 name = "Dialogic intentions",
@@ -230,10 +229,9 @@ interact_plot(
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
         ) +
-        scale_x_discrete(
-                name = "",
-                labels = c(
-                        "Curiosity prime",
-                        "No curiosity prime"
-                )) +
-        jtools::theme_apa()
+        scale_x_continuous(
+                name = "Curiosity prime",
+                breaks = c(0, 1),
+                labels = c("absent", "present")
+        ) +
+        jtools::theme_apa(legend.use.title = TRUE)

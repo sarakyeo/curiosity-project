@@ -7,8 +7,8 @@ process(
   y = "dialogue",
   x = "ncstim",
   m = "curiosity",
-  cov = c("nrstim")
-  mcx = 1,
+  cov = c("nrstim"),
+  mcx = 0,
   boot = 1000,
   seed = 20260518,
   total = 1,
