@@ -170,19 +170,19 @@ cdata |>
 # PROCESS cannot handle sample weights
 mcur <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
-        select(ncstim, nrstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
-        lm(formula = curiosity ~ ncstim + nrstim + frustration + dispcurious, weights = wtvar)
+        select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = curiosity ~ cstim + rstim + frustration + dispcurious, weights = wtvar)
 
 mfrus <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
-        select(ncstim, nrstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
-        lm(formula = frustration ~ ncstim + nrstim + curiosity + dispcurious, weights = wtvar)
+        select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = frustration ~ cstim + rstim + curiosity + dispcurious, weights = wtvar)
 
 mdialogue <- cdata |>
         filter(DVset == "DV set 1: Info Seeking") |>
         select(
-                ncstim,
-                nrstim,
+                cstim,
+                rstim,
                 dialogue,
                 curiosity,
                 frustration,
@@ -191,13 +191,13 @@ mdialogue <- cdata |>
                 wtvar
         ) |>
         lm(
-                formula = dialogue ~ ncstim +
-                        nrstim +
+                formula = dialogue ~ cstim +
+                        rstim +
                         curiosity +
                         frustration +
                         dispcurious +
-                        dispcurious:ncstim +
-                        dispcurious:nrstim,
+                        dispcurious:cstim +
+                        dispcurious:rstim,
                 weights = wtvar
         )
 
@@ -217,7 +217,7 @@ interact_plot(
 )
 interact_plot(
         mdialogue,
-        pred = ncstim,
+        pred = cstim,
         modx = dispcurious,
         interval = TRUE,
         int.width = .95,
@@ -229,9 +229,8 @@ interact_plot(
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
         ) +
-        scale_x_continuous(
+        scale_x_discrete(
                 name = "Curiosity prime",
-                breaks = c(0, 1),
-                labels = c("absent", "present")
+                labels = c("present", "absent")
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
