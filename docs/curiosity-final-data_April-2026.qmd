@@ -82,8 +82,20 @@ cdata |>
 We also split the sample randomly into separate variables. 
 
 ```{r}
+#| output: TRUE
+
 cdata |> 
  count(stim, DVset) |> 
-  pivot_wider(names_from = stim, values_from = n)
+  pivot_wider(names_from = stim, values_from = n) |> 
+  kbl()
+
+```
+
+# Data Analysis for Special Issue of the ANNALS of the AAPSS
+```{r}
+#| label: OLS-models-1
+
+source(here::here("scripts", "03_DVs.R"))
+source(here::here("scripts", "04_OLS-models.R"))
 
 ```
