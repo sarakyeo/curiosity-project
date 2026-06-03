@@ -209,7 +209,7 @@ cdata |>
 
 interact_plot(
         model = mdialogue,
-        pred = ncstim,
+        pred = cstim,
         modx = dispcurious,
         interval = TRUE,
         int.type = c("confidence"),

@@ -1,14 +1,10 @@
 
 # Creating experimental conditions ----------------------------------------
 ## All conditions ----------------
-cdata |> 
-        select(
-                `Q20_Page Submit`,
-                `Q22_Page Submit`,
-                `Q24_Page Submit`,
-                `Q26_Page Submit`
-        ) |> 
-        freq()
+cdata |> freq(`Q20_Page Submit`)
+cdata |> freq(`Q22_Page Submit`)
+cdata |> freq(`Q24_Page Submit`)
+cdata |> freq(`Q26_Page Submit`)
 
 cdata <- cdata |> 
         mutate(
