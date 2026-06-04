@@ -134,8 +134,7 @@ ixn.plot <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_discrete(
-                name = "Curiosity prime",
-                labels = c("absent", "present")
+                name = "Curiosity prime"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
@@ -145,3 +144,109 @@ ggsave(plot = ixn.plot,
        height = 5)
 
 # Next step is to try the OLS regression models with Bayesian statistics
+
+# Trying out the models without the three-way interactions, only two-way interactions between stimuli and trait curiosity ---------
+mcur <- cdata |> 
+        filter(DVset == "DV set 1: Info Seeking") |> 
+        select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = curiosity ~ cstim + rstim + frustration + dispcurious + cstim:dispcurious + rstim:dispcurious + cstim:rstim, weights = wtvar)
+
+mfrus <- cdata |> 
+        filter(DVset == "DV set 1: Info Seeking") |> 
+        select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
+        lm(formula = frustration ~ cstim + rstim + curiosity + dispcurious + cstim:dispcurious + rstim:dispcurious + cstim:rstim, weights = wtvar)
+
+mdialogue <- cdata |>
+        filter(DVset == "DV set 1: Info Seeking") |>
+        select(
+                cstim,
+                rstim,
+                dialogue,
+                curiosity,
+                frustration,
+                interest,
+                dispcurious,
+                wtvar
+        ) |>
+        lm(
+                formula = dialogue ~ cstim +
+                        rstim +
+                        curiosity +
+                        frustration +
+                        dispcurious +
+                        cstim:dispcurious +
+                        rstim:dispcurious +
+                        cstim:rstim,
+                weights = wtvar
+        )
+
+## Regression table -----------
+huxreg(
+        "Curiosity" = mcur,
+        "Frustation" = mfrus,
+        "Dialogue" = mdialogue,
+        number_format = 2,
+        stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
+        ci_level = .95,
+        align = ".",
+        statistics = c(
+                "N" = "nobs",
+                "Adj. R-squared" = "adj.r.squared",
+                "F" = "statistic",
+                "df" = "df",
+                "p" = "p.value"
+        ),
+        error_format = "({std.error})",
+        error_pos = c("same"),
+        coefs = c(
+                "(Intercept)" = "(Intercept)",
+                "Curiosity prime (present)" = "cstimCuriosity",
+                "Resolution (present)" = "rstimResolution",
+                "Frustration" = "frustration",
+                "Trait curiosity" = "dispcurious",
+                "Situational curiosity" = "curiosity",
+                "Curiosity prime (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
+                "Resolution (present) × Trait curiosity" = "rstimResolution:dispcurious",
+                "Curiosity prime (present) × Resolution (present)" = "cstimCuriosity:rstimResolution"
+        ))
+
+## Interaction plot ------------
+interact_plot(
+        model = mcur,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.type = c("confidence"),
+        int.width = 0.95,
+        legend.main = "Trait curiosity"
+) +
+        scale_y_continuous(
+                name = "Situational curiosity",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        ) +
+        scale_x_discrete(
+                name = "Curiosity prime"
+        ) +
+        jtools::theme_apa(legend.use.title = TRUE)
+
+interact_plot(
+        model = mdialogue,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.type = c("confidence"),
+        int.width = 0.95,
+        legend.main = "Trait curiosity"
+) +
+        scale_y_continuous(
+                name = "Dialogic intentions",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        ) +
+        scale_x_discrete(
+                name = "Curiosity prime"
+        ) +
+        jtools::theme_apa(legend.use.title = TRUE)
