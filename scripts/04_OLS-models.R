@@ -141,5 +141,7 @@ ixn.plot <- interact_plot(
 
 ggsave(plot = ixn.plot,
        here::here("outputs", "fig-three-way.png"),
-       width = 7,
+       width = 10,
        height = 5)
+
+# Next step is to try the OLS regression models with Bayesian statistics
