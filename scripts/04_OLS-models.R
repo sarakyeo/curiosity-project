@@ -3,12 +3,12 @@
 mcur <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
         select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
-        lm(formula = curiosity ~ cstim + rstim + frustration + dispcurious, weights = wtvar)
+        lm(formula = curiosity ~ cstim + rstim + frustration + dispcurious + cstim:rstim + cstim:dispcurious + rstim:dispcurious + cstim:rstim:dispcurious, weights = wtvar)
 
 mfrus <- cdata |> 
         filter(DVset == "DV set 1: Info Seeking") |> 
         select(cstim, rstim, dialogue, curiosity, frustration, interest, dispcurious, wtvar) |> 
-        lm(formula = frustration ~ cstim + rstim + curiosity + dispcurious, weights = wtvar)
+        lm(formula = frustration ~ cstim + rstim + curiosity + dispcurious + cstim:rstim + cstim:dispcurious + rstim:dispcurious + cstim:rstim:dispcurious, weights = wtvar)
 
 mdialogue <- cdata |>
         filter(DVset == "DV set 1: Info Seeking") |>
@@ -28,12 +28,17 @@ mdialogue <- cdata |>
                         curiosity +
                         frustration +
                         dispcurious +
-                        dispcurious:cstim +
-                        dispcurious:rstim,
+                        cstim:rstim +
+                        cstim:dispcurious +
+                        rstim:dispcurious +
+                        cstim:rstim:dispcurious,
                 weights = wtvar
         )
 
-huxreg("Curiosity" = mcur, "Frustation" = mfrus, "Dialogue" = mdialogue)
+huxreg("Curiosity" = mcur, "Frustation" = mfrus, "Dialogue" = mdialogue,
+stars = c(`***` = .001, `**` = .01, `*` = .05),
+error_format = "({std.error}) {p.value}",
+error_pos = "same")
 
 cdata |> 
         select(dispcurious, frustration, curiosity, dialogue) |> 
@@ -43,10 +48,13 @@ interact_plot(
         model = mdialogue,
         pred = cstim,
         modx = dispcurious,
+        mod2 = rstim,
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
-)
+) +
+        jtools::theme_apa()
+
 interact_plot(
         mdialogue,
         pred = cstim,
@@ -63,7 +71,7 @@ interact_plot(
         ) +
         scale_x_discrete(
                 name = "Curiosity prime",
-                labels = c("present", "absent")
+                labels = c("absent", "present")
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
@@ -93,7 +101,9 @@ huxreg(
                 "Trait curiosity" = "dispcurious",
                 "Situational curiosity" = "curiosity",
                 "Curiosity prime (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
-                "Resolution (present) × Trait curiosity" = "rstimResolution:dispcurious"
+                "Resolution (present) × Trait curiosity" = "rstimResolution:dispcurious",
+                "Curiosity prime (present) × Resolution prime (present)" = "cstimCuriosity:rstimResolution",
+                "Curiosity prime (present) × Resolution prime (present) × Trait curiosity" = "cstimCuriosity:rstimResolution:dispcurious"
         )
 ) |>
         set_all_padding(0) |>
@@ -110,10 +120,12 @@ ixn.plot <- interact_plot(
         model = mdialogue,
         pred = cstim,
         modx = dispcurious,
+        mod2 = rstim,
+        mod2.labels = c("No resolution", "Resolution"),
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
-        legend.main = "Dispositional curiosity"
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Dialogic intentions",
@@ -123,11 +135,11 @@ ixn.plot <- interact_plot(
         ) +
         scale_x_discrete(
                 name = "Curiosity prime",
-                labels = c("present", "absent")
+                labels = c("absent", "present")
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
 ggsave(plot = ixn.plot,
-       here::here("outputs", "fig-cstim-dispcurious-dialogue.png"),
+       here::here("outputs", "fig-three-way.png"),
        width = 7,
        height = 5)

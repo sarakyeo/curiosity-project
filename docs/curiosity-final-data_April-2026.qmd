@@ -104,7 +104,6 @@ source(here::here("scripts", "04_OLS-models.R"))
 #| label: tbl-OLS-1
 #| output: TRUE
 #| tbl-cap: Unstandardized regression coefficients (standard errors in parentheses followed by p-values) for regression models in the path analysis predicting intentions to engage in dialogue about astrobiology and space science. 
-
 huxreg(
   "Curiosity" = mcur,
   "Frustation" = mfrus,
@@ -129,11 +128,11 @@ huxreg(
     "Frustration" = "frustration",
     "Trait curiosity" = "dispcurious",
     "Situational curiosity" = "curiosity",
-    "Curiosity prime (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
-    "Resolution (present) × Trait curiosity" = "rstimResolution:dispcurious"
+    "Resolution (present) × Trait curiosity" = "rstimResolution:dispcurious",
+    "Curiosity prime (present) × Resolution prime (present)" = "cstimCuriosity:rstimResolution",
+    "Curiosity prime (present) × Resolution prime (present) × Trait curiosity" = "cstimCuriosity:rstimResolution:dispcurious"
   )
 )
-
 ```
 
 ```{r}
@@ -141,16 +140,18 @@ huxreg(
 #| output: TRUE
 #| height: 5
 #| width: 5
-#| fig-cap: Interaction between the curiosity prime manipulation and dispositional curiosity predicting intentions to engage in dialogue about astrobiology,
+#| fig-cap: Three-way interaction (ns in model) between the curiosity prime and resolution manipulations, and trait curiosity predicting intentions to engage in dialogue about astrobiology.
 
 interact_plot(
         model = mdialogue,
         pred = cstim,
         modx = dispcurious,
+        mod2 = rstim,
+        mod2.labels = c("No resolution", "Resolution"),
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
-        legend.main = "Dispositional curiosity"
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Dialogic intentions",
@@ -160,7 +161,7 @@ interact_plot(
         ) +
         scale_x_discrete(
                 name = "Curiosity prime",
-                labels = c("present", "absent")
+                labels = c("absent", "present")
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
