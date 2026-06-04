@@ -1,52 +1,22 @@
 
-# Astronomy: Situational curiosity -------------------
-pilot |> 
-        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+# Situational curiosity -------------------
+cdata |> 
+        select(cstim, rstim, dispcurious, curiosity, frustration, dialogue) |> 
         na.omit() |> 
-        lm(formula = asitcur ~ acurious + areso) |> 
-        summ()
+        lm(formula = curiosity ~ cstim + rstim + dispcurious) |> 
+        summ() # ns
 
-# Astronomy: Information Seeking ------------
-pilot |> 
-        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+# Frustration --------------------
+cdata |> 
+        select(cstim, rstim, dispcurious, curiosity, frustration, dialogue) |> 
         na.omit() |> 
-        lm(formula = ainfoseek ~ acurious + areso) |> 
-        summ()
+        lm(formula = frustration ~ cstim + rstim + dispcurious) |> 
+        summ() # ns
 
-# Astronomy: Provided closure ----------------
-pilot |> 
-        select(acurious, ainfoseek, aclosure, asitcur, areso, astim) |> 
+# Intentions to engage in dialogue --------------------
+cdata |> 
+        select(cstim, rstim, dispcurious, curiosity, frustration, dialogue) |> 
         na.omit() |> 
-        lm(formula = aclosure ~ acurious + areso) |> 
-        summ()
+        lm(formula = dialogue ~ cstim + rstim + dispcurious) |> 
+        summ() # ns
 
-# Rain: Situational curiosity -------------------
-pilot |> 
-        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
-        na.omit() |> 
-        lm(formula = rsitcur ~ rcurious + rreso) |> 
-        summ()
-
-# Rain: Information Seeking ------------
-pilot |> 
-        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
-        na.omit() |> 
-        lm(formula = rinfoseek ~ rcurious + rreso) |> 
-        summ()
-
-# Rain: Provided closure ----------------
-pilot |> 
-        select(rcurious, rinfoseek, rclosure, rsitcur, rreso, rstim) |> 
-        na.omit() |> 
-        lm(formula = rclosure ~ rcurious + rreso) |> 
-        summ()
-
-
-# Examining correlations between DVs --------------
-pilot |> 
-        select(asitcur, ainfoseek, aclosure) |> 
-        cor_pmat()
-
-pilot |> 
-        select(rsitcur, rinfoseek, rclosure) |> 
-        cor_pmat()
