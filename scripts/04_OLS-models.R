@@ -264,7 +264,7 @@ ixn.plot1 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_discrete(
-                name = "Curiosity prime"
+                name = "Curiosity manipulation"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
@@ -285,7 +285,7 @@ ixn.plot2 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_discrete(
-                name = "Curiosity prime"
+                name = "Curiosity manipulation"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
