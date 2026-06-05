@@ -212,9 +212,9 @@ mdialogue <- cdata |>
 
 ## Regression table -----------
 huxreg(
-        "Situational Curiosity" = mcur,
-        "Experienced Frustation" = mfrus,
-        "Intentions to Engage in Dialogue" = mdialogue,
+        "Curiosity" = mcur,
+        "Frustation" = mfrus,
+        "Dialogue" = mdialogue,
         number_format = 2,
         stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
         ci_level = .95,
