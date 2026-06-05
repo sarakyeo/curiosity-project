@@ -212,9 +212,9 @@ mdialogue <- cdata |>
 
 ## Regression table -----------
 huxreg(
-        "Curiosity" = mcur,
-        "Frustation" = mfrus,
-        "Dialogue" = mdialogue,
+        "Situational Curiosity" = mcur,
+        "Experienced Frustation" = mfrus,
+        "Intentions to Engage in Dialogue" = mdialogue,
         number_format = 2,
         stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
         ci_level = .95,
@@ -232,8 +232,8 @@ huxreg(
                 "(Intercept)" = "(Intercept)",
                 "Curiosity manipulation (present)" = "cstimCuriosity",
                 "Resolution manipulation (present)" = "rstimResolution",
-                "Frustration" = "frustration",
                 "Trait curiosity" = "dispcurious",
+                "Experienced frustration" = "frustration",
                 "Situational curiosity" = "curiosity",
                 "Trait curiosity × Curiosity manip. (present)" = "cstimCuriosity:dispcurious",
                 "Trait curiosity × Resolution manip. (present)" = "rstimResolution:dispcurious",
@@ -242,7 +242,7 @@ huxreg(
 ) |>
         set_font_size(11) |>
         set_label("tab:OLS-model") |>
-        set_caption("Unstandardized regression coefficients and standard errors (in parentheses) in the OLS regression models predicting situational curiosity, frustration, and intentions to engage in dialogue about astrobiology and space sciences.") |>
+        set_caption("Unstandardized regression coefficients and standard errors (in parentheses) in the OLS regression models predicting situational curiosity, experienced frustration, and intentions to engage in dialogue about astrobiology and space sciences.") |>
         print_latex() |>
         capture.output(file = here::here("outputs", "tab-OLS-model.tex"))
 
@@ -254,6 +254,7 @@ ixn.plot1 <- interact_plot(
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
+        colors = c("black", "black", "black"),
         legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
@@ -274,6 +275,7 @@ ixn.plot2 <- interact_plot(
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
+        colors = c("black", "black", "black"),
         legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
