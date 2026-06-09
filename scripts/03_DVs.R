@@ -1,28 +1,58 @@
 
 # Mediator: State/Situational curiosity ---------------------------------------------------
 cdata |> 
-        select(Q27_1:Q27_2) |> 
+        select(Q27_1:Q27_4) |> 
         freq()
 cdata <- var_recode(
         data = cdata,
-        vars = c(Q27_1:Q27_2)
+        vars = c(Q27_1:Q27_4)
         )
 cdata |> 
-        select(Q27_1c:Q27_2c) |> 
+        select(Q27_1c:Q27_4c) |> 
         freq()
+
+## Factor analysis -----------------
 cdata |> 
-        select(Q27_1c:Q27_2c) |> 
-        cor_test()  # Pearson's r = 0.79, p < .001
+        select(Q27_1c, Q27_2c, Q27_3c, Q27_4c) |> 
+        cortest.bartlett() # sig.
+cdata |> 
+        select(Q27_1c, Q27_2c, Q27_3c, Q27_4c) |> 
+        KMO() # Overall MSA = .87
+cdata |> 
+        select(Q27_1c, Q27_2c, Q27_3c, Q27_4c) |> 
+        fa.parallel() # 1 factor, 1 component
+fa <- cdata |> 
+        select(Q27_1c, Q27_2c, Q27_3c, Q27_4c) |> 
+        fa(
+                .,
+                nfactors = 1,
+                fm = "pa",
+                max.iter = 100,
+                rotate = "promax"
+        )
+fa |> fa.diagram()
+print(fa$loadings, cutoff = .3, digits = 3)
+
 cdata <- cdata |> 
         rowwise() |> 
-        mutate(curiosity = mean(
-                c(Q27_1c, Q27_2c),
-                na.rm = TRUE
-        ))
-cdata |> freq(curiosity)
+        mutate(
+                curiosity4 = mean(
+                        c(Q27_1c, Q27_2c, Q27_3c, Q27_4c),
+                        na.rm = TRUE
+                ))
+cdata |> freq(curiosity4)
+cdata |> group_by() |> 
+        descr(curiosity4, weights = cdata$wtvar) # M = 5.51, SD = 1.44
+
+cdata <- cdata |>
+        rowwise() |>
+        mutate(
+                curiosity2 = mean(c(Q27_1c, Q27_4c), na.rm = TRUE)
+        )
+cdata |> freq(curiosity2)
 cdata |> 
         group_by() |> 
-        descr(curiosity, weights = cdata$wtvar) # M = 5.49, SD = 1.50
+        descr(curiosity2, weights = cdata$wtvar) # M = 5.52, SD = 1.48
 
 
 # DV: Dialogue (Q29_6:Q29_13) ---------------------------------
@@ -80,7 +110,7 @@ cdata <- cdata |>
 cdata |> freq(dialogue)
 cdata |> 
         group_by() |> 
-        descr(dialogue) # M = 4.66, SD = 1.77
+        descr(dialogue, weights = cdata$wtvar) # M = 4.52, SD = 1.77
 
 
 # DV: Seek information (Q29_1:Q29_6) ---------------------------------
@@ -133,7 +163,7 @@ cdata <- cdata |>
 cdata |> freq(infoseek)
 cdata |> 
         group_by() |> 
-        descr(infoseek) # M = 4.68, SD = 1.81
+        descr(infoseek, weights = cdata$wtvar) # M = 4.53, SD = 1.81
 
 # Create interest as control variable --------------------
 cdata |> freq(Q12_5)
@@ -144,7 +174,7 @@ cdata <- cdata |>
 cdata |> freq(interest)
 cdata |>
         group_by() |>
-        descr(interest) # M = 4.60, SD = 1.96
+        descr(interest, weights = cdata$wtvar) # M = 4.53, SD = 1.94
 
 
 # Create trait curiosity as control variable -------------------
@@ -192,7 +222,7 @@ cdata <- cdata |>
 cdata |> freq(dispcurious)
 cdata |> 
         group_by() |> 
-        descr(dispcurious) # M = 5.42, SD = 1.35
+        descr(dispcurious, weights = cdata$wtvar) # M = 5.32, SD = 1.35
 
 
 # Create frustration as a mediator --------------
@@ -215,4 +245,4 @@ cdata <- cdata |>
 cdata |> freq(frustration)
 cdata |> 
         group_by() |> 
-        descr(frustration) # M = 2.53, SD = 2.03
+        descr(frustration, weights = cdata$wtvar) # M = 2.40, SD = 1.94
