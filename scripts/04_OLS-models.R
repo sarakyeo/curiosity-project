@@ -302,3 +302,43 @@ ggsave(
         width = 6.5,
         height = 5
 )
+
+# 9-Jun-26: Trying out model without trait curiosity and frustration -----
+mcur <- cdata |>
+        filter(DVset == "DV set 1: Info Seeking") |>
+        select(
+                cstim,
+                rstim,
+                dialogue,
+                dispcurious,
+                curiosity,
+                wtvar
+        ) |>
+        lm(
+                formula = curiosity ~ cstim +
+                        rstim +
+                        dispcurious +
+                        cstim:rstim,
+                weights = wtvar
+        )
+summ(mcur)
+
+mdialogue <- cdata |>
+        filter(DVset == "DV set 1: Info Seeking") |>
+        select(
+                cstim,
+                rstim,
+                dialogue,
+                curiosity,
+                dispcurious,
+                wtvar
+        ) |>
+        lm(
+                formula = dialogue ~ cstim +
+                        rstim +
+                        dispcurious +
+                        curiosity +
+                        cstim:rstim,
+                weights = wtvar
+        )
+summ(mdialogue)
