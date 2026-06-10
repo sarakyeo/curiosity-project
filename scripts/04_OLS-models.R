@@ -125,13 +125,13 @@ export_summs(
 ## Interaction plot code ------------
 ixn.plot1 <- interact_plot(
         model = mcur,
-        pred = dispcurious,
-        modx = cstim,
+        pred = cstim,
+        modx = dispcurious,
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
         colors = c("grey", "black"),
-        legend.main = ""
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Elicited curiosity",
@@ -139,23 +139,20 @@ ixn.plot1 <- interact_plot(
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
         ) +
-        scale_x_continuous(
-                name = "Trait curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
+        scale_x_discrete(
+                name = "Curiosity manipulation"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
 ixn.plot2 <- interact_plot(
         model = minfoseek,
-        pred = dispcurious,
-        modx = cstim,
+        pred = cstim,
+        modx = dispcurious,
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
         colors = c("grey", "black"),
-        legend.main = ""
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Information seeking intentions",
@@ -163,23 +160,20 @@ ixn.plot2 <- interact_plot(
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
         ) +
-        scale_x_continuous(
-                name = "Trait curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
+        scale_x_discrete(
+                name = "Curiosity manipulation"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
 ixn.plot3 <- interact_plot(
         model = minfoseek,
-        pred = dispcurious,
-        modx = curiosity2,
+        pred = curiosity2,
+        modx = dispcurious,
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
-        colors = c("black", "black", "black"),
-        legend.main = "Elicited curiosity"
+        colors = c("grey", "black"),
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Information seeking intentions",
@@ -188,7 +182,7 @@ ixn.plot3 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_continuous(
-                name = "Trait curiosity",
+                name = "Elicited curiosity",
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
@@ -198,12 +192,20 @@ ixn.plot3 <- interact_plot(
 # Code for saving ixn plot
 ggsave(
         ixn.plot1,
-        filename = here::here("outputs", "fig-mcur.png"),
+        filename = here::here("outputs", "fig1.png"),
         width = 6.5,
         height = 5
 )
 
-
-# scale_x_discrete(
-#                 name = "Curiosity manipulation"
-#         )
+ggsave(
+        ixn.plot2,
+        filename = here::here("outputs", "fig2.png"),
+        width = 6.5,
+        height = 5
+)
+ggsave(
+        ixn.plot3,
+        filename = here::here("outputs", "fig3.png"),
+        width = 6.5,
+        height = 5
+)
