@@ -46,7 +46,7 @@ huxreg(
         "Curiosity" = mcur,
         "Information seeking intentions" = minfoseek,
         number_format = 2,
-        stars = c(`***` = 0.001, `**` = 0.01, `*` = 0.05),
+        stars = NULL,
         ci_level = .95,
         align = ".",
         statistics = c(
