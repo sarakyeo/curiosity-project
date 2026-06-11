@@ -7,7 +7,7 @@ mcur <- cdata |>
                 rstim,
                 curiosity2,
                 dispcurious,
-                infoseek,
+                dialogue,
                 wtvar
         ) |>
         lm(
@@ -19,9 +19,9 @@ mcur <- cdata |>
                         cstim:dispcurious,
                 weights = wtvar
         )
-summ(mcur, scale = TRUE)
+summ(mcur, vifs = TRUE, scale = TRUE)
 
-minfoseek <- cdata |>
+mdialogue <- cdata |>
         filter(DVset == "DV set 1: Info Seeking") |>
         select(
                 cstim,
@@ -29,64 +29,65 @@ minfoseek <- cdata |>
                 dialogue,
                 curiosity2,
                 dispcurious,
-                infoseek,
+                dialogue,
                 wtvar
         ) |>
         lm(
-                formula = infoseek ~ cstim +
+                formula = dialogue ~ cstim +
                         rstim +
                         dispcurious +
                         curiosity2 +
-                        cstim:rstim + 
+                        cstim:rstim +
                         cstim:dispcurious +
                         dispcurious:curiosity2,
                 weights = wtvar
         )
-summ(minfoseek)
+summ(mdialogue, vifs = TRUE, scale = TRUE)
 
 
 ## Regression table for Overleaf -----------
-huxreg(
-        "Elicited curiosity" = mcur,
-        "Information seeking intentions" = minfoseek,
-        number_format = 2,
-        stars = NULL,
-        ci_level = .95,
-        align = ".",
-        statistics = c(
-                "N" = "nobs",
-                "Adj. R-squared" = "adj.r.squared",
-                "F" = "statistic",
-                "df" = "df",
-                "p" = "p.value"
-        ),
-        error_format = "({std.error}), {p.value}",
-        error_pos = c("same"),
-        coefs = c(
-                "(Intercept)" = "(Intercept)",
-                "Curiosity manipulation (present)" = "cstimCuriosity",
-                "Resolution manipulation (present)" = "rstimResolution",
-                "Trait curiosity" = "dispcurious",
-                "Elicited curiosity" = "curiosity2",
-                "Curiosity manip. (present) × Resolution manip. (present)" = "cstimCuriosity:rstimResolution",
-                "Curiosity manip. (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
-                "Trait curiosity × Elicited curiosity" = "dispcurious:curiosity2"
-        )) |>
-        set_font_size(11) |>
-        set_label("tab:OLS-model") |>
-        set_caption("Unstandardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting situational curiosity, and intentions to seek information about the search for life in the universe.") |>
-        print_latex() |>
-        capture.output(file = here::here("outputs", "tab-OLS-model-formattedwell.tex"))
+# huxreg(
+#         "Elicited curiosity" = mcur,
+#         "Intentions to engage in dialogue" = mdialogue,
+#         number_format = 2,
+#         stars = NULL,
+#         ci_level = .95,
+#         align = ".",
+#         statistics = c(
+#                 "N" = "nobs",
+#                 "Adj. R-squared" = "adj.r.squared",
+#                 "F" = "statistic",
+#                 "df" = "df",
+#                 "p" = "p.value"
+#         ),
+#         error_format = "({std.error}), {p.value}",
+#         error_pos = c("same"),
+#         coefs = c(
+#                 "(Intercept)" = "(Intercept)",
+#                 "Curiosity manipulation (present)" = "cstimCuriosity",
+#                 "Resolution manipulation (present)" = "rstimResolution",
+#                 "Trait curiosity" = "dispcurious",
+#                 "Elicited curiosity" = "curiosity2",
+#                 "Curiosity manip. (present) × Resolution manip. (present)" = "cstimCuriosity:rstimResolution",
+#                 "Curiosity manip. (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
+#                 "Trait curiosity × Elicited curiosity" = "dispcurious:curiosity2"
+#         )) |>
+#         set_font_size(11) |>
+#         set_label("tab:OLS-model") |>
+#         set_caption("Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting situational curiosity, and intentions to seek information about the search for life in the universe.") |>
+#         print_latex() |>
+#         capture.output(file = here::here("outputs", "tab-OLS-model.tex"))
 
 
 export_summs(
         mcur,
-        minfoseek,
+        mdialogue,
         model.names = c(
                 "Elicited curiosity",
-                "Information seeking intentions"
+                "Intentions to engage in dialogue"
         ),
         scale = TRUE,
+        stars = NULL,
         ci_level = 0.95,
         align = ".",
         error_format = "({std.error}), {p.value}",
@@ -111,16 +112,13 @@ export_summs(
         set_font_size(11) |>
         set_label("tab:OLS-model") |>
         set_caption(
-                "Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting situational curiosity, and intentions to seek information about the search for life in the universe."
+                "Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting situational curiosity, and intentions to engage in dialogue about the search for life in the universe."
         ) |>
         print_latex() |>
         capture.output(file = here::here("outputs", "tab-OLS-model.tex"))
+# The reason that this LaTeX table appears to be formatted incorrectly has to do with the text wrapping of the footnote (or lack thereof). If I move the stars to a different line, then this resolves the text wrapping issue and fits the table on to a page in portrait format.
+# I can then find and replace the 0.00 with < .001, add the -- for the empty cells, and remove the "-" in front of any "-0.00" coefficients manually in Overleaf.
 
-# Because huxreg() cannot scale the coefficients in the model, but the LaTex formatting is better than export_summ(), I used huxreg to generate the table format, export_summs() to generate the values. Then I put both into Claude and gave it the following commands:
-# Please replace the values in tab-OLS-model-formattedwell.tex with those from tab-OLS-model.tex. Retain stars and commas. 
-# Can you please change the p-values that are 0.00 to < .001 in the TeX table I uploaded?
-# I did these in separate prompts, but I might be able to combine them in the future.
-# I then manually added to the TeX file the "--" for the cells that did not contain estimates and changed the -0.00 coefficient to 0.00.
 
 ## Interaction plot code ------------
 ixn.plot1 <- interact_plot(
@@ -145,7 +143,7 @@ ixn.plot1 <- interact_plot(
         jtools::theme_apa(legend.use.title = TRUE)
 
 ixn.plot2 <- interact_plot(
-        model = minfoseek,
+        model = mdialogue,
         pred = cstim,
         modx = dispcurious,
         interval = TRUE,
@@ -155,7 +153,7 @@ ixn.plot2 <- interact_plot(
         legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
-                name = "Information seeking intentions",
+                name = "Intentions to engage in dialogue",
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
@@ -166,7 +164,7 @@ ixn.plot2 <- interact_plot(
         jtools::theme_apa(legend.use.title = TRUE)
 
 ixn.plot3 <- interact_plot(
-        model = minfoseek,
+        model = mdialogue,
         pred = curiosity2,
         modx = dispcurious,
         interval = TRUE,
@@ -176,7 +174,7 @@ ixn.plot3 <- interact_plot(
         legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
-                name = "Information seeking intentions",
+                name = "Intentions to engage in dialogue",
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)

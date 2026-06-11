@@ -72,13 +72,13 @@ cdata |>
 
 # Intentions to engage in dialogue --------------------
 cdata |> 
-        select(cstim, rstim, dispcurious, curiosity, frustration, infoseek, dialogue) |> 
+        select(cstim, rstim, dispcurious, curiosity2, frustration, infoseek, dialogue, wtvar) |> 
         na.omit() |> 
-        lm(formula = dialogue ~ cstim + rstim + dispcurious) |> 
+        lm(formula = dialogue ~ cstim + rstim + curiosity2 + dispcurious, weights = wtvar) |> 
         summ() # ns
 
 cdata |> 
-        select(cstim, rstim, dispcurious, curiosity, frustration, infoseek, dialogue) |> 
+        select(cstim, rstim, dispcurious, curiosity2, frustration, infoseek, dialogue) |> 
         ggplot(aes(x = cstim, y = dialogue)) +
         scale_y_continuous(name = "Intentions to engage in dialogue",
                            limits = c(1,7),
