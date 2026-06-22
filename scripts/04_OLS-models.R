@@ -109,7 +109,7 @@ export_summs(
                 "Elicited curiosity" = "curiosity2",
                 "Curiosity manip. (present) × Resolution manip. (present)" = "cstimCuriosity:rstimResolution",
                 "Curiosity manip. (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
-                "Trait curiosity × Elicited curiosity" = "dispcurious:curiosity2"
+                "Elicited curiosity × Trait curiosity" = "dispcurious:curiosity2"
         )) |>
         set_font_size(11) |>
         set_label("tab:OLS-model") |>
@@ -141,8 +141,8 @@ ixn.plot1 <- interact_plot(
         interval = TRUE,
         int.type = c("confidence"),
         int.width = 0.95,
-        johnson_neyman = TRUE,
-        jnplot = TRUE,
+        # johnson_neyman = TRUE,
+        # jnplot = TRUE,
         colors = c("grey", "black"),
         legend.main = ""
 ) +
@@ -153,7 +153,7 @@ ixn.plot1 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_continuous(
-                name = "Trait curiosity",
+                name = "Expt condition",
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
