@@ -153,10 +153,34 @@ ixn.plot1 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_continuous(
-                name = "Expt condition",
+                name = "Trait curiosity",
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
+        ) +
+        jtools::theme_apa(legend.use.title = TRUE)
+
+## Inverse plot for ixn.plot1 ------
+inv.ixn.plot1 <- interact_plot(
+        model = mcur,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.type = c("confidence"),
+        int.width = 0.95,
+        # johnson_neyman = TRUE,
+        # jnplot = TRUE,
+        colors = c("grey", "black"),
+        legend.main = ""
+) +
+        scale_y_continuous(
+                name = "Elicited curiosity",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        ) +
+        scale_x_discrete(
+                name = "Experimental condition"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
@@ -194,6 +218,30 @@ ixn.plot2 <- interact_plot(
                 limits = c(1, 7),
                 expand = c(0, 0),
                 breaks = seq(1, 7, 1)
+        ) +
+        jtools::theme_apa(legend.use.title = TRUE)
+
+## Inverse plot for ixn.plot2 ------
+inv.ixn.plot2 <- interact_plot(
+        model = mdialogue,
+        pred = cstim,
+        modx = dispcurious,
+        interval = TRUE,
+        int.type = c("confidence"),
+        int.width = 0.95,
+        # johnson_neyman = TRUE,
+        # jnplot = TRUE,
+        colors = c("grey", "black"),
+        legend.main = ""
+) +
+        scale_y_continuous(
+                name = "Intentions to engage in dialogue",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        ) +
+        scale_x_discrete(
+                name = "Experimental manipulation"
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 
@@ -261,11 +309,26 @@ ggsave(
 )
 
 ggsave(
+        inv.ixn.plot1,
+        filename = here::here("outputs", "fig1inv.png"),
+        width = 6.5,
+        height = 5
+)
+
+ggsave(
         ixn.plot2,
         filename = here::here("outputs", "fig2.png"),
         width = 6.5,
         height = 5
 )
+
+ggsave(
+        inv.ixn.plot2,
+        filename = here::here("outputs", "fig2inv.png"),
+        width = 6.5,
+        height = 5
+)
+
 ggsave(
         ixn3final,
         filename = here::here("outputs", "fig3.png"),
