@@ -48,39 +48,6 @@ probe_interaction(mcur, pred = dispcurious, modx = cstim)
 
 
 ## Regression table for Overleaf -----------
-# huxreg(
-#         "Elicited curiosity" = mcur,
-#         "Intentions to engage in dialogue" = mdialogue,
-#         number_format = 2,
-#         stars = NULL,
-#         ci_level = .95,
-#         align = ".",
-#         statistics = c(
-#                 "N" = "nobs",
-#                 "Adj. R-squared" = "adj.r.squared",
-#                 "F" = "statistic",
-#                 "df" = "df",
-#                 "p" = "p.value"
-#         ),
-#         error_format = "({std.error}), {p.value}",
-#         error_pos = c("same"),
-#         coefs = c(
-#                 "(Intercept)" = "(Intercept)",
-#                 "Curiosity manipulation (present)" = "cstimCuriosity",
-#                 "Resolution manipulation (present)" = "rstimResolution",
-#                 "Trait curiosity" = "dispcurious",
-#                 "Elicited curiosity" = "curiosity2",
-#                 "Curiosity manip. (present) × Resolution manip. (present)" = "cstimCuriosity:rstimResolution",
-#                 "Curiosity manip. (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
-#                 "Trait curiosity × Elicited curiosity" = "dispcurious:curiosity2"
-#         )) |>
-#         set_font_size(11) |>
-#         set_label("tab:OLS-model") |>
-#         set_caption("Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting situational curiosity, and intentions to seek information about the search for life in the universe.") |>
-#         print_latex() |>
-#         capture.output(file = here::here("outputs", "tab-OLS-model.tex"))
-
-
 export_summs(
         mcur,
         mdialogue,
@@ -122,7 +89,7 @@ export_summs(
 # I can then find and replace the 0.00 with < .001, add the -- for the empty cells, and remove the "-" in front of any "-0.00" coefficients manually in Overleaf.
 
 
-## Interaction plot code ------------
+## Interaction plots ------------
 probe_interaction(model = mcur, pred = dispcurious, cstim)
 # Johnson-Neyman intervals are not available for factor predictors or moderators. 
 # SIMPLE SLOPES ANALYSIS
@@ -134,44 +101,17 @@ probe_interaction(model = mcur, pred = dispcurious, cstim)
 #   Est.   S.E.   t val.      p
 # ------ ------ -------- ------
 #   0.77   0.06    12.98   0.00
-ixn.plot1 <- interact_plot(
-        model = mcur,
-        pred = dispcurious,
-        modx = cstim,
-        interval = TRUE,
-        int.type = c("confidence"),
-        int.width = 0.95,
-        # johnson_neyman = TRUE,
-        # jnplot = TRUE,
-        colors = c("grey", "black"),
-        legend.main = ""
-) +
-        scale_y_continuous(
-                name = "Elicited curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        scale_x_continuous(
-                name = "Trait curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        jtools::theme_apa(legend.use.title = TRUE)
 
-## Inverse plot for ixn.plot1 ------
-inv.ixn.plot1 <- interact_plot(
+ixn.plot1 <- interact_plot(
         model = mcur,
         pred = cstim,
         modx = dispcurious,
         interval = TRUE,
+        centered = "all",
         int.type = c("confidence"),
         int.width = 0.95,
-        # johnson_neyman = TRUE,
-        # jnplot = TRUE,
-        colors = c("grey", "black"),
-        legend.main = ""
+        colors = c("grey70", "grey45", "black"),
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Elicited curiosity",
@@ -180,59 +120,36 @@ inv.ixn.plot1 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_discrete(
-                name = "Experimental condition"
+                name = ""
         ) +
-        jtools::theme_apa(legend.use.title = TRUE)
+        jtools::theme_apa(legend.use.title = TRUE) +
+        theme(
+                axis.text.x = element_text(size = 13, color = "black"),
+                axis.text.y = element_text(size = 13),
+                axis.title = element_text(size = 13)
+        )
+
 
 probe_interaction(model = mdialogue, pred = dispcurious, cstim)
-# Johnson-Neyman intervals are not available for factor predictors or moderators. 
+# Johnson-Neyman intervals are not available for factor predictors or moderators.
 # SIMPLE SLOPES ANALYSIS
-# Slope of dispcurious when cstim = No curiosity: 
+# Slope of dispcurious when cstim = No curiosity:
 #   Est.   S.E.   t val.      p
 # ------ ------ -------- ------
 #   0.58   0.06     9.40   0.00
-# Slope of dispcurious when cstim = Curiosity: 
+# Slope of dispcurious when cstim = Curiosity:
 #   Est.   S.E.   t val.      p
 # ------ ------ -------- ------
 #   0.50   0.07     7.52   0.00
 ixn.plot2 <- interact_plot(
         model = mdialogue,
-        pred = dispcurious,
-        modx = cstim,
-        interval = TRUE,
-        int.type = c("confidence"),
-        int.width = 0.95,
-         johnson_neyman = TRUE,
-        jnplot = TRUE,
-        colors = c("grey", "black"),
-        legend.main = ""
-) +
-        scale_y_continuous(
-                name = "Intentions to engage in dialogue",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        scale_x_continuous(
-                name = "Trait curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        jtools::theme_apa(legend.use.title = TRUE)
-
-## Inverse plot for ixn.plot2 ------
-inv.ixn.plot2 <- interact_plot(
-        model = mdialogue,
         pred = cstim,
         modx = dispcurious,
         interval = TRUE,
-        int.type = c("confidence"),
+        int.type = "confidence",
         int.width = 0.95,
-        # johnson_neyman = TRUE,
-        # jnplot = TRUE,
-        colors = c("grey", "black"),
-        legend.main = ""
+        colors = c("grey70", "grey45", "black"),
+        legend.main = "Trait curiosity"
 ) +
         scale_y_continuous(
                 name = "Intentions to engage in dialogue",
@@ -241,9 +158,14 @@ inv.ixn.plot2 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         scale_x_discrete(
-                name = "Experimental manipulation"
+                name = ""
         ) +
-        jtools::theme_apa(legend.use.title = TRUE)
+        jtools::theme_apa(legend.use.title = TRUE) +
+        theme(
+                axis.text.x = element_text(size = 13, color = "black"),
+                axis.text.y = element_text(size = 13),
+                axis.title = element_text(size = 13)
+        )
 
 probe_interaction(model = mdialogue, pred = dispcurious, modx = curiosity2, jnplot = TRUE)
 ixn.plot3 <- interact_plot(
@@ -270,6 +192,7 @@ ixn.plot3 <- interact_plot(
                 breaks = seq(1, 7, 1)
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
+
 jnplot.3 <- johnson_neyman(
         model = mdialogue,
         pred = curiosity2,
@@ -309,22 +232,8 @@ ggsave(
 )
 
 ggsave(
-        inv.ixn.plot1,
-        filename = here::here("outputs", "fig1inv.png"),
-        width = 6.5,
-        height = 5
-)
-
-ggsave(
         ixn.plot2,
         filename = here::here("outputs", "fig2.png"),
-        width = 6.5,
-        height = 5
-)
-
-ggsave(
-        inv.ixn.plot2,
-        filename = here::here("outputs", "fig2inv.png"),
         width = 6.5,
         height = 5
 )
