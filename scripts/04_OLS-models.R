@@ -175,6 +175,39 @@ mdialogue.curiosity2.disp <- interact_plot(
         ) +
         jtools::theme_apa(legend.use.title = TRUE)
 mdialogue.curiosity2.disp
+jnplot.3 <- johnson_neyman(
+        model = mdialogue,
+        pred = curiosity2,
+        modx = dispcurious,
+        plot = TRUE,
+        sig.color = "#363636",
+        insig.color = "grey",
+        title = ""
+)
+jnplotfinal <- jnplot.3$plot +
+        scale_y_continuous(
+                name = "Slope of elicited curiosity",
+                expand = c(0, 0)
+        ) +
+        scale_x_continuous(
+                name = "Trait curiosity",
+                limits = c(1, 7),
+                expand = c(0, 0),
+                breaks = seq(1, 7, 1)
+        )
+ixn3final <- ggpubr::ggarrange(
+        mdialogue.curiosity2.disp,
+        jnplotfinal,
+        nrow = 2,
+        ncol = 1,
+        align = "hv"
+)
+ggsave(
+        ixn3final,
+        filename = here::here("outputs", "mdialogue-curiousity2-disp.png"),
+        width = 6.5,
+        height = 10
+)
 
 
 ## Regression table for Overleaf -----------

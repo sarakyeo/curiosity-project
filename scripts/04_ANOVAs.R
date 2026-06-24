@@ -55,7 +55,7 @@ cdata |>
         summ() # ns
 
 cdata |> 
-        select(cstim, rstim, dispcurious, curiosity, frustration, infoseek, dialogue) |> 
+        select(cstim, rstim, dispcurious, curiosity2, frustration, infoseek, dialogue) |> 
         ggplot(aes(x = rstim, y = frustration)) +
         scale_y_continuous(name = "Experienced frustration",
                            limits = c(1,7),
