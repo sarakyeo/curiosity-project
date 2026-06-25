@@ -44,6 +44,8 @@ cdata |> freq(curiosity4)
 cdata |> group_by() |> 
         descr(curiosity4, weights = cdata$wtvar) # M = 5.51, SD = 1.44
 
+cdata |> 
+        cor_test(Q27_1c, Q27_4c) # Pearson's r = .78, p < .001
 cdata <- cdata |>
         rowwise() |>
         mutate(
