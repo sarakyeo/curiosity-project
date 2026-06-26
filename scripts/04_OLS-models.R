@@ -23,48 +23,48 @@ mcur <- cdata |>
 summ(mcur, vifs = TRUE, scale = TRUE)
 
 ### Probing and graphing significant interactions ---------------------
-probe_interaction(model = mcur, pred = dispcurious, modx = cstim)
-# Slope of dispcurious when cstim = No curiosity: 
-#   Est.   S.E.   t val.      p
-#   0.67   0.06    11.82   0.00
+# probe_interaction(model = mcur, pred = dispcurious, modx = cstim)
+# # Slope of dispcurious when cstim = No curiosity: 
+# #   Est.   S.E.   t val.      p
+# #   0.67   0.06    11.82   0.00
 
-# Slope of dispcurious when cstim = Curiosity: 
-#   Est.   S.E.   t val.      p
-#   0.77   0.06    12.98   0.00
+# # Slope of dispcurious when cstim = Curiosity: 
+# #   Est.   S.E.   t val.      p
+# #   0.77   0.06    12.98   0.00
 
-mcur.cstim.disp <- interact_plot(
-        model = mcur,
-        pred = cstim,
-        modx = dispcurious,
-        interval = TRUE,
-        centered = "all",
-        int.type = c("confidence"),
-        int.width = 0.95,
-        colors = c("grey70", "grey45", "black"),
-        legend.main = "Trait curiosity"
-) +
-        scale_y_continuous(
-                name = "Elicited curiosity",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        scale_x_discrete(
-                name = ""
-        ) +
-        jtools::theme_apa(legend.use.title = TRUE) +
-        theme(
-                axis.text.x = element_text(size = 13, color = "black"),
-                axis.text.y = element_text(size = 13, color = "black"),
-                axis.title.y = element_text(size = 13)
-        )
-mcur.cstim.disp
-ggsave(
-        mcur.cstim.disp,
-        filename = here::here("outputs", "mcur-cstim-disp.png"),
-        width = 6.5,
-        height = 5
-)
+# mcur.cstim.disp <- interact_plot(
+#         model = mcur,
+#         pred = cstim,
+#         modx = dispcurious,
+#         interval = TRUE,
+#         centered = "all",
+#         int.type = c("confidence"),
+#         int.width = 0.95,
+#         colors = c("grey70", "grey45", "black"),
+#         legend.main = "Trait curiosity"
+# ) +
+#         scale_y_continuous(
+#                 name = "Elicited curiosity",
+#                 limits = c(1, 7),
+#                 expand = c(0, 0),
+#                 breaks = seq(1, 7, 1)
+#         ) +
+#         scale_x_discrete(
+#                 name = ""
+#         ) +
+#         jtools::theme_apa(legend.use.title = TRUE) +
+#         theme(
+#                 axis.text.x = element_text(size = 13, color = "black"),
+#                 axis.text.y = element_text(size = 13, color = "black"),
+#                 axis.title.y = element_text(size = 13)
+#         )
+# mcur.cstim.disp
+# ggsave(
+#         mcur.cstim.disp,
+#         filename = here::here("outputs", "mcur-cstim-disp.png"),
+#         width = 6.5,
+#         height = 5
+# )
 
 
 ## DV = intentions to engage in dialogue ----------------------
@@ -92,51 +92,52 @@ summ(mdialogue, vifs = TRUE, scale = TRUE)
 
 ### Probing and graphing significant interactions ----------------
 #### cstim x dispcurious --------------------
-probe_interaction(mcur, pred = dispcurious, modx = cstim)
-# Slope of dispcurious when cstim = No curiosity: 
-#   Est.   S.E.   t val.      p
-#   0.67   0.06    11.82   0.00
+# probe_interaction(mdialogue, pred = dispcurious, modx = cstim)
+# # Slope of dispcurious when cstim = No curiosity: 
+# #   Est.   S.E.   t val.      p
+# #   0.67   0.06    11.82   0.00
 
-# Slope of dispcurious when cstim = Curiosity: 
-#   Est.   S.E.   t val.      p
-#   0.77   0.06    12.98   0.00
+# # Slope of dispcurious when cstim = Curiosity: 
+# #   Est.   S.E.   t val.      p
+# #   0.77   0.06    12.98   0.00
 
-mdialogue.cstim.disp <- interact_plot(
-        model = mdialogue,
-        pred = cstim,
-        modx = dispcurious,
-        interval = TRUE,
-        int.type = "confidence",
-        int.width = 0.95,
-        colors = c("grey70", "grey45", "black"),
-        legend.main = "Trait curiosity"
-) +
-        scale_y_continuous(
-                name = "Intentions to engage in dialogue",
-                limits = c(1, 7),
-                expand = c(0, 0),
-                breaks = seq(1, 7, 1)
-        ) +
-        scale_x_discrete(
-                name = ""
-        ) +
-        jtools::theme_apa(legend.use.title = TRUE) +
-        theme(
-                axis.text.x = element_text(size = 13, color = "black"),
-                axis.text.y = element_text(size = 13, color = "black"),
-                axis.title.y = element_text(size = 13)
-        )
-mdialogue.cstim.disp
-ggsave(
-        mdialogue.cstim.disp,
-        filename = here::here("outputs", "mdialogue-cstim-disp.png"),
-        width = 6.5,
-        height = 5
-)
+# mdialogue.cstim.disp <- interact_plot(
+#         model = mdialogue,
+#         pred = cstim,
+#         modx = dispcurious,
+#         interval = TRUE,
+#         int.type = "confidence",
+#         int.width = 0.95,
+#         colors = c("grey70", "grey45", "black"),
+#         legend.main = "Trait curiosity"
+# ) +
+#         scale_y_continuous(
+#                 name = "Intentions to engage in dialogue",
+#                 limits = c(1, 7),
+#                 expand = c(0, 0),
+#                 breaks = seq(1, 7, 1)
+#         ) +
+#         scale_x_discrete(
+#                 name = ""
+#         ) +
+#         jtools::theme_apa(legend.use.title = TRUE) +
+#         theme(
+#                 axis.text.x = element_text(size = 13, color = "black"),
+#                 axis.text.y = element_text(size = 13, color = "black"),
+#                 axis.title.y = element_text(size = 13)
+#         )
+# mdialogue.cstim.disp
+# ggsave(
+#         mdialogue.cstim.disp,
+#         filename = here::here("outputs", "mdialogue-cstim-disp.png"),
+#         width = 6.5,
+#         height = 5
+# )
 
 #### curiosity2 x dispcurious --------------------
-probe_interaction(model = mdialogue, pred = dispcurious, modx = curiosity2)
+probe_interaction(model = mdialogue, pred = curiosity2, modx = dispcurious)
 # When curiosity2 is OUTSIDE the interval [-1.06, 2.26], the slope of dispcurious is p < .05.
+# When dispcurious is OUTSIDE the interval [-1.60, 2.08], the slope of curiosity2 is p < .05.
 # Slope of dispcurious when curiosity2 = 3.987380 (- 1 SD): 
 #   Est.   S.E.   t val.      p
 #   0.36   0.05     6.89   0.00
