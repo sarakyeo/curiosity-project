@@ -17,8 +17,7 @@ mcur <- cdata |>
                         cstim +
                         rstim +
                         dispcurious +
-                        cstim:rstim +
-                        cstim:dispcurious,
+                        cstim:rstim,
                 weights = wtvar
         )
 summ(mcur, vifs = TRUE, scale = TRUE)
@@ -86,7 +85,6 @@ mdialogue <- cdata |>
                         dispcurious +
                         curiosity2 +
                         cstim:rstim +
-                        cstim:dispcurious +
                         dispcurious:curiosity2,
                 weights = wtvar
         )
@@ -138,17 +136,18 @@ ggsave(
 
 #### curiosity2 x dispcurious --------------------
 probe_interaction(model = mdialogue, pred = dispcurious, modx = curiosity2)
+# When curiosity2 is OUTSIDE the interval [-1.06, 2.26], the slope of dispcurious is p < .05.
 # Slope of dispcurious when curiosity2 = 3.987380 (- 1 SD): 
 #   Est.   S.E.   t val.      p
-#   0.39   0.06     6.28   0.00
+#   0.36   0.05     6.89   0.00
 
 # Slope of dispcurious when curiosity2 = 5.494214 (Mean): 
 #   Est.   S.E.   t val.      p
-#   0.58   0.06     9.40   0.00
+#   0.54   0.05    10.64   0.00
 
 # Slope of dispcurious when curiosity2 = 7.001047 (+ 1 SD): 
 #   Est.   S.E.   t val.      p
-#   0.76   0.08    10.07   0.00
+#   0.73   0.07    10.69   0.00
 
 mdialogue.curiosity2.disp <- interact_plot(
         model = mdialogue,
