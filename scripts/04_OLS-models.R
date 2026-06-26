@@ -237,13 +237,12 @@ export_summs(
                 "Trait curiosity" = "dispcurious",
                 "Elicited curiosity" = "curiosity2",
                 "Curiosity manip. (present) × Resolution manip. (present)" = "cstimCuriosity:rstimResolution",
-                "Curiosity manip. (present) × Trait curiosity" = "cstimCuriosity:dispcurious",
                 "Elicited curiosity × Trait curiosity" = "dispcurious:curiosity2"
         )) |>
         set_font_size(11) |>
         set_label("tab:OLS-model") |>
         set_caption(
-                "Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting elicited curiosity, and intentions to seek information about the search for life in the universe."
+                "Standardized regression coefficients and standard errors (in parentheses) followed by p-values in the OLS regression models predicting elicited curiosity, and intentions to engage in dialogue about the search for life in the universe."
         ) |>
         print_latex() |>
         capture.output(file = here::here("outputs", "tab-OLS-model.tex"))
